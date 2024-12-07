@@ -126,7 +126,13 @@ const successStory = [
 function HomePage() {
   return (
     <div>
-      <div className="flex flex-row justify-between items-center h-[100dvh] bg-[url('/image/ffflux.svg')] bg-cover bg-center">
+      <div
+        className="flex flex-row justify-between items-center h-[100dvh] bg-cover bg-center"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,1) 29%, rgba(42,145,145,1) 100%)",
+        }}
+      >
         <div className="flex-1">
           <img src="/image/hero-left.png" alt="" />
         </div>
@@ -197,17 +203,17 @@ function HomePage() {
               key={index}
               className={`${
                 index === 1
-                  ? "border-orange-600 shadow-dimShadowBlue"
-                  : "border-orange-200 shadow-dimShadowOrange"
+                  ? " shadow-dimShadowBlue"
+                  : "border-[#1282A2] shadow-dimShadowOrange"
               }  border-2 h-76 p-[20px] overflow-hidden bg-white
-            hover:shadow-dimShadowBlue hover:border-orange-500  transition-all duration-500 ease-in-out flex flex-col`}
+            hover:shadow-dimShadowBlue hover:border-white  transition-all duration-500 ease-in-out flex flex-col cursor-default`}
             >
               <img src={item.image} alt="" className="w-28" loading="lazy" />
               <h1 className="text-[clamp(1rem,5vw,1.4rem)] font-bold">
                 {item.title}
               </h1>
               <p className="text-slate-500">{item.description}</p>
-              <button className="font-poppins px-2 py-1 rounded-lg text-orange-600 font-bold tracking-wide text-sm w-fit mt-2">
+              <button className="font-poppins px-2 py-1 rounded-lg text-blue-900 font-bold tracking-wide text-sm w-fit mt-2">
                 Read More
               </button>
             </div>
@@ -225,6 +231,7 @@ function HomePage() {
                   ? "col-span-2 justify-center"
                   : ""
               }`}
+              key={index}
             >
               <div className="flex-1 border-2 border-orange-200"></div>
               <div className="flex-[3] bg-gray-500 px-6 py-4">

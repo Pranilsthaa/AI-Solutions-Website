@@ -12,6 +12,7 @@ import ClientInquiries from "./Pages/Admin/inquiry/Inquiry.tsx";
 import AdminDashboard from "./Pages/Admin/Dashboard.tsx";
 import ClientFeedbacks from "./Pages/Admin/Feedback/Feedback.tsx";
 import ViewEvents from "./Pages/Admin/eventss/ViewEvents.tsx";
+import EventDetailPage from "./Pages/-Events/EventDetail/index.tsx";
 
 const router = createBrowserRouter(
   [
@@ -31,6 +32,10 @@ const router = createBrowserRouter(
         {
           path: "/events",
           element: <EventPage />,
+        },
+        {
+          path: "/events/:id",
+          element: <EventDetailPage />,
         },
       ],
     },

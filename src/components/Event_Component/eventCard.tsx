@@ -12,7 +12,7 @@ interface Event {
   id: number;
   title: string;
   date: string;
-  image: string;
+  banner_img: string;
   description: string;
 }
 
@@ -24,7 +24,6 @@ export default function EventCard({ event }: EventCardProps) {
   const [isShared, setIsShared] = useState(false);
 
   const handleShare = (platform: string) => {
-    // Implement sharing logic here
     console.log(`Sharing to ${platform}`);
     setIsShared(true);
     setTimeout(() => setIsShared(false), 2000);
@@ -33,7 +32,7 @@ export default function EventCard({ event }: EventCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <img
-        src={event.image}
+        src={`http://192.168.1.106:5600/images/${event.banner_img}`}
         alt={event.title}
         width={600}
         height={400}
@@ -44,14 +43,14 @@ export default function EventCard({ event }: EventCardProps) {
         <p className="text-gray-600 mb-2">{event.date}</p>
         <p className="text-gray-700 mb-4">{event.description}</p>
         <div className="flex justify-end">
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="w-[100px]">
                 <Share2 className="h-4 w-4 mr-2" />
                 {isShared ? "Shared!" : "Share"}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align="end" className="w-[200px]">
               <DropdownMenuItem onClick={() => handleShare("Twitter")}>
                 Twitter
               </DropdownMenuItem>
