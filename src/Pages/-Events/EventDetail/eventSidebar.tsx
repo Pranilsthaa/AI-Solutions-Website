@@ -28,7 +28,9 @@ function EventSidebar({ fetchEventByID }: EventSidebarProps) {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(`http://192.168.1.106:5600/getevents`);
+      const response = await axios.get(
+        `sem5pd-production.up.railway.app/getevents`
+      );
       setEventDetails(response.data);
     } catch (error) {
       console.error("Failed to fetch event by id", error);
@@ -83,7 +85,7 @@ function EventCard({ event }: { event: Event; onClick: () => void }) {
       <Link to={`/events/${event.id}`}>
         <CardContent className="p-4 flex items-center space-x-4">
           <img
-            src={`http://192.168.1.106:5600/images/${event.banner_img}`}
+            src={`sem5pd-production.up.railway.app/images/${event.banner_img}`}
             alt={event.title}
             className="w-16 h-16 object-cover rounded"
           />

@@ -82,7 +82,7 @@ export default function EventsById({
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
-            src={`http://192.168.1.106:5600/images/${event.banner_img}`}
+            src={`sem5pd-production.up.railway.app/images/${event.banner_img}`}
             alt={event.title}
             className="w-full h-64 sm:h-80 md:h-96 object-cover cursor-pointer"
             onClick={() => setIsGalleryOpen(true)}
@@ -172,7 +172,7 @@ export default function EventsById({
                 images.map((item, index) => (
                   <motion.img
                     key={index}
-                    src={`http://192.168.1.106:5600/images/${item.image}`}
+                    src={`sem5pd-production.up.railway.app/images/${item.image}`}
                     alt={`Event image ${index + 1}`}
                     className="w-full h-24 object-cover rounded-lg cursor-pointer"
                     whileHover={{ scale: 1.05 }}

@@ -86,7 +86,7 @@ export default function ClientInquiryForm() {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "http://192.168.1.106:5600/post_inquiry",
+        "sem5pd-production.up.railway.app/post_inquiry",
         values
       );
       if (response) {

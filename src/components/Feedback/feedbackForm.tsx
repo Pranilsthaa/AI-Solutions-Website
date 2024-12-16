@@ -49,7 +49,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
     // Here you would typically send the feedback to your server
     try {
       const response = await axios.post(
-        "http://192.168.1.106:5600/post_feedback",
+        "sem5pd-production.up.railway.app/post_feedback",
         {
           name: name,
           email: email,

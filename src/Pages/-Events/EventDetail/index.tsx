@@ -11,7 +11,7 @@ export default function EventDetailPage() {
   const fetchEventByID = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.1.106:5600/getevents/${id}`
+        `sem5pd-production.up.railway.app/getevents/${id}`
       );
       setEventDetails(response.data);
     } catch (error) {

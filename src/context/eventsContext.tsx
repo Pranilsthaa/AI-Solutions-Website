@@ -32,7 +32,7 @@ const EventProvider = ({ children }: { children: React.ReactNode }) => {
   const getEvents = async () => {
     try {
       const response = await axios.get<Event[]>(
-        "http://192.168.1.106:5600/getevents"
+        "sem5pd-production.up.railway.app/getevents"
       );
       setEventData(response.data);
       return null;

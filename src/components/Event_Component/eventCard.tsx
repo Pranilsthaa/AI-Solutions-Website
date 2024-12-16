@@ -32,7 +32,7 @@ export default function EventCard({ event }: EventCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <img
-        src={`http://192.168.1.106:5600/images/${event.banner_img}`}
+        src={`sem5pd-production.up.railway.app/images/${event.banner_img}`}
         alt={event.title}
         width={600}
         height={400}

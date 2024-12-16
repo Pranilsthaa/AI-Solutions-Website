@@ -26,7 +26,7 @@ export default function SearchInput() {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://192.168.1.106:5600/searchArticle",
+        "sem5pd-production.up.railway.app/searchArticle",
         {
           params: { key: encodeURIComponent(value.trim()) }, // Pass value as query parameter
         }

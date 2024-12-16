@@ -52,7 +52,9 @@ export default function ArticleSection() {
 
   const fetchArticles = async () => {
     try {
-      const response = await axios.get("http://192.168.1.106:5600/getarticles");
+      const response = await axios.get(
+        "sem5pd-production.up.railway.app/getarticles"
+      );
       if (response.status == 200) {
         setArticles(response.data);
       }
@@ -76,7 +78,7 @@ export default function ArticleSection() {
         <div className="grid gap-10 md:grid-cols-2 lg:gap-16 items-start">
           <div className="space-y-4">
             <img
-              src={`http://192.168.1.106:5600/images/${articles[0]?.article_image}`}
+              src={`sem5pd-production.up.railway.app/images/${articles[0]?.article_image}`}
               alt="AI in Healthcare"
               width={600}
               height={400}
@@ -99,7 +101,7 @@ export default function ArticleSection() {
               return (
                 <div className="flex gap-4 items-start" key={index}>
                   <img
-                    src={`http://192.168.1.106:5600/images/${article?.article_image}`}
+                    src={`sem5pd-production.up.railway.app/images/${article?.article_image}`}
                     alt={article?.title}
                     width={200}
                     height={150}
