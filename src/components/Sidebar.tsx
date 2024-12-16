@@ -6,9 +6,10 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 const sidebarItems = [
   { name: "Dashboard", href: "/admin" },
   { name: "Client Inquiries", href: "/admin/inquiries" },
-  { name: "Create Event", href: "/admin/events_create" },
   { name: "View Events", href: "/admin/events" },
   { name: "Client Feedback", href: "/admin/feedback" },
+  { name: "Create Event", href: "/admin/events_create" },
+  { name: "Post Article", href: "/admin/post_article" },
 ];
 
 export function Sidebar() {
@@ -19,7 +20,7 @@ export function Sidebar() {
       <div className="w-64 border-r bg-gray-100/40 dark:bg-gray-800/40">
         <ScrollArea className="h-full py-6">
           <div className="px-3 py-2">
-            <h2 className="mb-2 px-4 text-lg font-semibold">Admin Dashboard</h2>
+            <h2 className="mb-2 px-4 text-lg font-semibold">Admin Panel</h2>
             <div className="space-y-1">
               {sidebarItems.map((item) => (
                 <Button

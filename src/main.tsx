@@ -13,6 +13,9 @@ import AdminDashboard from "./Pages/Admin/Dashboard.tsx";
 import ClientFeedbacks from "./Pages/Admin/Feedback/Feedback.tsx";
 import ViewEvents from "./Pages/Admin/eventss/ViewEvents.tsx";
 import EventDetailPage from "./Pages/-Events/EventDetail/index.tsx";
+import ArticleSection from "./Pages/Article/Articles.tsx";
+import ArticleDetailsPage from "./Pages/Article/articleDetail.tsx";
+import PostArticle from "./Pages/Admin/Article/postArticle.tsx";
 
 const router = createBrowserRouter(
   [
@@ -36,6 +39,14 @@ const router = createBrowserRouter(
         {
           path: "/events/:id",
           element: <EventDetailPage />,
+        },
+        {
+          path: "/articles",
+          element: <ArticleSection />,
+        },
+        {
+          path: "/articles/:slug",
+          element: <ArticleDetailsPage />,
         },
       ],
     },
@@ -62,6 +73,10 @@ const router = createBrowserRouter(
         {
           path: "feedback",
           element: <ClientFeedbacks />,
+        },
+        {
+          path: "post_article",
+          element: <PostArticle />,
         },
       ],
     },

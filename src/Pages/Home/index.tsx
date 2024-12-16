@@ -1,6 +1,20 @@
 import { Link } from "react-router-dom";
 import CountEffect from "@/components/countEffect";
 import { AiFillCodepenSquare } from "react-icons/ai";
+import { motion } from "motion/react";
+import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
+import TestimonialSlider from "@/components/Testimonial/testimonial";
+import { FeedbackIcon } from "@/components/Feedback/feedbackIcon";
+import { ArrowRight, Brain, Cpu, Network } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const data = [
   { to: 657, from: 400, duration: 2, label: "Number" },
@@ -8,44 +22,58 @@ const data = [
   { to: 8772, from: 8300, duration: 2, label: "Testing" },
   { to: 892, from: 850, duration: 5, label: "Coffee" },
 ];
-const dummyData = [
+
+const services = [
   {
-    title: "AI and Machine Learning Products Creators",
+    title: "AI-Powered Analytics",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    image: "/image/hero-left.png",
+      "Harness the power of machine learning to extract actionable insights from your data, driving informed decision-making across your organization.",
+    icon: Brain,
+    image: "/placeholder.svg?height=200&width=400",
+    color: "from-purple-500 to-indigo-500",
   },
   {
-    title: "AI and Machine Learning Products Creators",
+    title: "Natural Language Processing",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    image: "/image/hero-left.png",
+      "Leverage cutting-edge NLP models to understand, interpret, and generate human-like text, revolutionizing customer interactions and content creation.",
+    icon: Cpu,
+    image: "/placeholder.svg?height=200&width=400",
+    color: "from-blue-500 to-cyan-500",
   },
   {
-    title: "AI and Machine Learning Products Creators",
+    title: "AI Integration Solutions",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    image: "/image/hero-left.png",
+      "Seamlessly integrate AI capabilities into your existing systems and workflows, enhancing efficiency and unlocking new possibilities for innovation.",
+    icon: Network,
+    image: "/placeholder.svg?height=200&width=400",
+    color: "from-green-500 to-emerald-500",
   },
   {
-    title: "AI and Machine Learning Products Creators",
+    title: "AI-Powered Analytics",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    image: "/image/hero-left.png",
+      "Harness the power of machine learning to extract actionable insights from your data, driving informed decision-making across your organization.",
+    icon: Brain,
+    image: "/placeholder.svg?height=200&width=400",
+    color: "from-purple-500 to-indigo-500",
   },
   {
-    title: "AI and Machine Learning Products Creators",
+    title: "Natural Language Processing",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    image: "/image/hero-left.png",
+      "Leverage cutting-edge NLP models to understand, interpret, and generate human-like text, revolutionizing customer interactions and content creation.",
+    icon: Cpu,
+    image: "/placeholder.svg?height=200&width=400",
+    color: "from-blue-500 to-cyan-500",
   },
   {
-    title: "AI and Machine Learning Products Creators",
+    title: "AI Integration Solutions",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    image: "/image/hero-left.png",
+      "Seamlessly integrate AI capabilities into your existing systems and workflows, enhancing efficiency and unlocking new possibilities for innovation.",
+    icon: Network,
+    image: "/placeholder.svg?height=200&width=400",
+    color: "from-green-500 to-emerald-500",
   },
 ];
+
 const successStory = [
   {
     name: "Healthcare",
@@ -123,6 +151,43 @@ const successStory = [
     icon: <AiFillCodepenSquare />,
   },
 ];
+
+const words = [
+  {
+    text: "Our",
+    className: "text-black",
+  },
+  {
+    text: "AI",
+    className: "text-green-600",
+  },
+  {
+    text: "Solutions",
+    className: "text-black",
+  },
+];
+const logos = [
+  { name: "Company 1", src: "/image/client_logo_1.png" },
+  { name: "Company 2", src: "/image/client_logo_2.jpg" },
+  { name: "Company 3", src: "/image/client_logo_3.webp" },
+  { name: "Company 4", src: "/image/client_logo_4.png" },
+  { name: "Company 5", src: "/image/client_logo_5.png" },
+  { name: "Company 6", src: "/image/client_logo_6.jpg" },
+  { name: "Company 7", src: "/image/client_logo_7.png" },
+  { name: "Company 8", src: "/image/client_logo_8.png" },
+];
+
+const success = [
+  {
+    text: "Success",
+    className: "text-black",
+  },
+
+  {
+    text: "Story",
+    className: "text-black",
+  },
+];
 function HomePage() {
   return (
     <div>
@@ -146,7 +211,7 @@ function HomePage() {
           </p>
           <Link
             to="#"
-            className="bg-blue-500 text-white px-8 py-3 rounded-md font-poppins rounded-3xl"
+            className="bg-blue-500 text-white px-8 py-3 rounded-md font-poppins rounded-3xl "
           >
             Get Started
           </Link>
@@ -193,38 +258,145 @@ function HomePage() {
           </div>
         </div>
       </div>
-      <div className="min-h-[500px] px-16 mx-16 pb-16">
-        <h1 className="text-4xl font-bold font-dosis mb-10">
-          Our AI Solutions
+      {/* SOLUTIONS SECTION */}
+      {/* <div className="min-h-[500px] px-16 mx-16 pb-16">
+        <h1 className="text-xl  mb-10">
+          <TypewriterEffectSmooth
+            words={words}
+            cursorClassName={"text-green bg-green-600"}
+          />
         </h1>
-        <div className="grid grid-cols-3 gap-x-10 gap-y-16">
+        <div className="grid sm:grid-cols-3 grid-cols-1 gap-x-10 gap-y-16">
           {dummyData.map((item, index) => (
-            <div
+            <motion.div
+              initial={{ y: 80, opacity: 0 }}
+              whileInView={{
+                y: 0,
+                opacity: 1,
+                transition: {
+                  y: { ease: "backInOut" },
+                  opacity: { ease: "linear" },
+                },
+              }}
               key={index}
               className={`${
                 index === 1
                   ? " shadow-dimShadowBlue"
                   : "border-[#1282A2] shadow-dimShadowOrange"
-              }  border-2 h-76 p-[20px] overflow-hidden bg-white
-            hover:shadow-dimShadowBlue hover:border-white  transition-all duration-500 ease-in-out flex flex-col cursor-default`}
+              } group border-2 h-[420px] p-[20px] overflow-hidden bg-white
+            hover:shadow-dimShadowBlue hover:border-white transition-color duration-500 ease-in-out flex flex-col cursor-default relative`}
             >
-              <img src={item.image} alt="" className="w-28" loading="lazy" />
-              <h1 className="text-[clamp(1rem,5vw,1.4rem)] font-bold">
+              <div className="h-[27%]">
+                <img
+                  src={item.image}
+                  alt=""
+                  className="w-28 group-hover:scale-125 transition-all duration-300"
+                  loading="lazy"
+                />
+              </div>
+
+              <h1 className="text-[clamp(1rem,5vw,1.3rem)] font-poppins font-semibold">
                 {item.title}
               </h1>
-              <p className="text-slate-500">{item.description}</p>
-              <button className="font-poppins px-2 py-1 rounded-lg text-blue-900 font-bold tracking-wide text-sm w-fit mt-2">
+              <p className="text-slate-800 font- text-[clamp(1rem,5vw,0.6rem)] h-[50%]">
+                {item.description}
+              </p>
+              <button className="absolute bottom-4 left-4 font-poppins px-2 py-1 rounded-lg text-blue-900 hover:underline hover:underline-offset-4 hover:decoration-2 font-bold tracking-wide text-sm w-fit mt-2">
                 Read More
               </button>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </div> */}
+      <section className="py-24 bg-gray-50 px-20">
+        <div className="container mx-auto px-4">
+          <h1 className="text-xl  mb-10">
+            <TypewriterEffectSmooth
+              words={words}
+              cursorClassName={"text-green bg-green-600"}
+            />
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+              <Card
+                key={index}
+                className="overflow-hidden transition-all duration-300 hover:shadow-lg"
+              >
+                <div className="relative h-48">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="transition-transform duration-300 hover:scale-105 object-cover w-full h-full absolute inset-0"
+                  />
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-75`}
+                  ></div>
+                  <service.icon className="absolute top-4 right-4 h-8 w-8 text-white" />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-2xl font-semibold">
+                    {service.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-gray-600">
+                    {service.description}
+                  </CardDescription>
+                </CardContent>
+                <CardFooter>
+                  <Button variant="ghost" className="group">
+                    Learn More
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+      {/* Trusted By */}
+      <section className="py-12 bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-14 text-gray-800 dark:text-gray-200">
+            Trusted by Industry Leaders
+          </h2>
+          <div className="relative overflow-hidden">
+            <div className="flex animate-slide">
+              {[...logos, ...logos].map((logo, index) => (
+                <div key={index} className="flex-shrink-0 w-[150px] mx-8">
+                  <img
+                    src={logo.src}
+                    alt={`${logo.name} logo`}
+                    width={150}
+                    height={80}
+                    className="object-contain aspect-square"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* SUCCESS STORY */}
       <div className="min-h-[500px] px-16 mx-16 pb-16">
-        <h1 className="font-dosis text-4xl font-bold mb-10">Success Story</h1>
+        <h1 className="font-dosis text-4xl font-bold mb-10">
+          <h1 className="text-xl  mb-10">
+            <TypewriterEffectSmooth
+              words={success}
+              cursorClassName={"text-green bg-green-600"}
+            />
+          </h1>
+        </h1>
         <div className="grid md:grid-cols-2 gap-x-10 gap-y-16">
           {successStory.map((item, index) => (
-            <div
+            <motion.div
+              initial={{ x: 80 }}
+              whileInView={{
+                x: 0,
+                transition: {
+                  y: { ease: "backInOut" },
+                },
+              }}
               className={`flex flex-row min-h-[150px] ${
                 index === successStory.length - 1 &&
                 successStory.length % 2 !== 0
@@ -267,10 +439,13 @@ function HomePage() {
                   </p>
                 </figure>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
+      {/* Client Testimonial */}
+      <TestimonialSlider />
+      <FeedbackIcon />
     </div>
   );
 }

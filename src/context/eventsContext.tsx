@@ -2,10 +2,15 @@ import React, { useContext, createContext, useState } from "react";
 import axios from "axios";
 
 // Define the API response type
-interface Event {
+export interface Event {
   id: number;
   name: string;
+  title: string;
   date: string;
+  start_time: string;
+  end_time: string;
+  banner_img: string;
+  location: string;
   // Add other fields as per your API response
 }
 

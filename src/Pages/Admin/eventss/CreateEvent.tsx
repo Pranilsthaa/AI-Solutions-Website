@@ -1,4 +1,7 @@
 import { useState, ChangeEvent } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { CalendarIcon, X, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,21 +15,43 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { X, Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";
+import CustomButton from "@/components/CustomButton";
+import { toast, Toaster } from "sonner";
+
+interface Speaker {
+  name: string;
+  photo: string;
+  designation: string;
+}
+
+interface FormData {
+  title: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+  date: Date | null;
+  location: string;
+  banner: File | null;
+  additionalImages: File[];
+  speakers: Speaker[];
+}
 
 export default function CreateEvent() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
     startTime: "",
     endTime: "",
-    date: "",
+    date: null,
     location: "",
-    banner: null as File | null,
+    banner: null,
+    additionalImages: [],
     speakers: [{ name: "", photo: "", designation: "" }],
   });
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -34,7 +59,7 @@ export default function CreateEvent() {
   ) => {
     const { name, value } = e.target;
     if (index !== undefined && name.startsWith("speaker")) {
-      const field = name.split(".")[1];
+      const field = name.split(".")[1] as keyof Speaker;
       setFormData((prevData) => ({
         ...prevData,
         speakers: prevData.speakers.map((speaker, i) =>
@@ -50,11 +75,21 @@ export default function CreateEvent() {
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData((prevData) => ({
-        ...prevData,
-        banner: e.target.files![0],
-      }));
+    if (e.target.files) {
+      if (e.target.name === "banner") {
+        setFormData((prevData) => ({
+          ...prevData,
+          banner: e.target.files![0],
+        }));
+      } else if (e.target.name === "additionalImages") {
+        setFormData((prevData) => ({
+          ...prevData,
+          additionalImages: [
+            ...prevData.additionalImages,
+            ...Array.from(e.target.files),
+          ],
+        }));
+      }
     }
   };
 
@@ -65,22 +100,43 @@ export default function CreateEvent() {
     data.append("description", formData.description);
     data.append("startTime", formData.startTime);
     data.append("endTime", formData.endTime);
-    data.append("date", formData.date);
+    data.append("date", formData.date ? formData.date.toISOString() : "");
     data.append("location", formData.location);
     data.append("speakers", JSON.stringify(formData.speakers));
-    data.append("banner", formData.banner as Blob);
+    if (formData.banner) {
+      data.append("banner", formData.banner);
+    }
+    formData.additionalImages.forEach((image, index) => {
+      data.append(`additionalImages`, image);
+    });
     try {
       const response = await axios.post(
         "http://192.168.1.106:5600/postevents",
         data
       );
-      if (response.status === 201) {
-        alert("Event created successfully");
+      if (response.status === 200) {
+        toast.success("Event created successfully");
       } else {
-        alert("Failed to create event");
+        console.log(`Failed to create event: ${response.statusText}`);
       }
     } catch (error) {
-      console.error("Failed to create event", error);
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error("Error data:", error.response.data);
+          console.error("Error status:", error.response.status);
+          console.error("Error headers:", error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error("Error request:", error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error("Error message:", error.message);
+        }
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
@@ -101,8 +157,16 @@ export default function CreateEvent() {
     }));
   };
 
+  const removeAdditionalImage = (index: number) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      additionalImages: prevData.additionalImages.filter((_, i) => i !== index),
+    }));
+  };
+
   return (
     <Card className="w-full max-w-3xl mx-auto">
+      <Toaster />
       <CardHeader>
         <CardTitle className="text-2xl">Create New Event</CardTitle>
         <CardDescription>
@@ -137,14 +201,15 @@ export default function CreateEvent() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="date">Date</Label>
-                <Input
-                  id="date"
-                  name="date"
-                  type="date"
-                  value={formData.date}
-                  onChange={handleChange}
-                  required
-                />
+                <div className="relative">
+                  <DatePicker
+                    selected={formData.date}
+                    onChange={(date: Date) =>
+                      setFormData((prev) => ({ ...prev, date }))
+                    }
+                    customInput={<CustomButton date={formData.date} />}
+                  />
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="location">Location</Label>
@@ -200,6 +265,38 @@ export default function CreateEvent() {
                     className="w-20 h-20 object-cover rounded"
                   />
                 )}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="additionalImages">Additional Images</Label>
+              <Input
+                id="additionalImages"
+                name="additionalImages"
+                type="file"
+                onChange={handleFileChange}
+                accept="image/*"
+                multiple
+                className="w-full"
+              />
+              <div className="grid grid-cols-3 gap-2 mt-2">
+                {formData.additionalImages.map((image, index) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt={`Additional Image ${index + 1}`}
+                      className="w-full h-24 object-cover rounded"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-1 right-1"
+                      onClick={() => removeAdditionalImage(index)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

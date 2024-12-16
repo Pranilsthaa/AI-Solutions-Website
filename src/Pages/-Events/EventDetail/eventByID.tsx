@@ -1,4 +1,15 @@
-import { ArrowLeft, CalendarDays, Clock, MapPin, Share2 } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  ArrowLeft,
+  CalendarDays,
+  Clock,
+  MapPin,
+  Share2,
+  ChevronDown,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -8,6 +19,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { ImageGallery } from "./ImageGallery";
 
 interface Speaker {
   name: string;
@@ -26,10 +39,13 @@ interface EventDetailsProps {
       end_time: string;
       location: string;
       banner_img: string;
+      gallery_images: string[];
     }
   ];
   speaker: Speaker[];
 }
+
+export const fallBackImg = "/public/image/fallback.jpg";
 
 export default function EventsById({
   themeColor = "purple",
@@ -38,118 +54,189 @@ export default function EventsById({
   themeColor?: string;
   eventDetails: EventDetailsProps | null;
 }) {
-  // const [eventDetails, setEventDetails] = useState<EventDetailsProps | null>(
-  //   null
-  // );
-
-  // const fetchEventByID = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://192.168.1.106:5600/getevents/${id}`
-  //     );
-  //     setEventDetails(response.data);
-  //   } catch (error) {
-  //     console.error("Failed to fetch event by id", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchEventByID();
-  // }, []);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleShare = (platform: string) => {
     console.log(`Sharing to ${platform}`);
   };
 
+  if (!eventDetails) {
+    return <div>Loading...</div>;
+  }
+
+  const { eventById, speaker, images } = eventDetails;
+  const event = eventById[0];
+
   return (
-    <div className="min-h-screen flex  justify-center">
-      <Card className="w-full max-w-4xl bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl overflow-hidden">
-        <div className="p-4 absolute  z-50 ">
-          <button
-            onClick={() => window.history.back()}
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 py-2 px-4"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </button>
-        </div>
-        <div className="relative h-64 sm:h-80 md:h-96">
-          <img
-            src={
-              eventDetails
-                ? `http://192.168.1.106:5600/images/${eventDetails.eventById[0].banner_img}`
-                : ""
-            }
-            alt={eventDetails?.eventById[0].title}
-            style={{
-              objectFit: "cover",
-            }}
-            className="rounded-t-2xl absolute inset-0 w-full h-full object-cover"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="min-h-screen flex justify-center items-center p-4 "
+    >
+      <Card className="w-full max-w-4xl bg-white shadow-xl rounded-2xl overflow-hidden">
+        <div className="relative">
+          <motion.img
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5 }}
+            src={`http://192.168.1.106:5600/images/${event.banner_img}`}
+            alt={event.title}
+            className="w-full h-64 sm:h-80 md:h-96 object-cover cursor-pointer"
+            onClick={() => setIsGalleryOpen(true)}
           />
+          <div className="absolute top-4 left-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.history.back()}
+              className="bg-white/80 backdrop-blur-sm hover:bg-white/90"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
+          </div>
         </div>
         <CardContent className="p-6 sm:p-8">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-800">
-            {eventDetails?.eventById[0].title}
-          </h1>
-          <p className="text-gray-600 mb-6">
-            {eventDetails?.eventById[0].description}
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <motion.h1
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-3xl sm:text-4xl font-bold mb-4 text-gray-800"
+          >
+            {event.title}
+          </motion.h1>
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <p
+              className={`text-gray-600 mb-4 ${
+                isDescriptionExpanded ? "" : "line-clamp-3"
+              }`}
+            >
+              {event.description}
+            </p>
+            {event.description.length > 150 && (
+              <Button
+                variant="link"
+                onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                className="p-0 h-auto font-semibold text-blue-600 hover:text-blue-800"
+              >
+                {isDescriptionExpanded ? "Read less" : "Read more"}
+                <ChevronDown
+                  className={`ml-1 h-4 w-4 transition-transform ${
+                    isDescriptionExpanded ? "rotate-180" : ""
+                  }`}
+                />
+              </Button>
+            )}
+          </motion.div>
+          <Separator className="my-6" />
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6"
+          >
             <div className="flex items-center text-gray-700">
               <CalendarDays className={`w-5 h-5 mr-2 text-${themeColor}-600`} />
-              <span>{eventDetails?.eventById[0].date}</span>
+              <span>{event?.date.split("T")[0]}</span>
             </div>
             <div className="flex items-center text-gray-700">
               <Clock className={`w-5 h-5 mr-2 text-${themeColor}-600`} />
               <span>
-                {eventDetails?.eventById[0].start_time} -{" "}
-                {eventDetails?.eventById[0].end_time}
+                {event.start_time} - {event.end_time}
               </span>
             </div>
-            <div className="flex items-center text-gray-700 sm:col-span-2">
+            <div className="flex items-center text-gray-700">
               <MapPin className={`w-5 h-5 mr-2 text-${themeColor}-600`} />
-              <span>{eventDetails?.eventById[0].location}</span>
+              <span>{event.location}</span>
             </div>
-          </div>
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-            Speakers
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {eventDetails?.eventById[0] && eventDetails?.speaker.length > 0 ? (
-              eventDetails?.speaker.map((item: Speaker, index: number) => (
-                <div key={index} className="flex items-center space-x-4">
-                  <Avatar className="w-12 h-12">
-                    <AvatarImage src={item.photoURL} alt={item.name} />
-                    <AvatarFallback
-                      style={{
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      {item.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="font-medium text-gray-800">{item.name}</p>
-                    <p className="text-sm text-gray-600">{item.designation}</p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <h2>No Speakers Added</h2>
-            )}
-          </div>
-          <div className="mt-8 flex justify-center">
-            {/* <Badge
-              className={`px-4 py-2 text-lg bg-${themeColor}-600 hover:bg-${themeColor}-700 transition-colors`}
-            >
-              Register Now
-            </Badge> */}
-          </div>
-          <div className="absolute right-4 bottom-4 z-100 ">
-            <DropdownMenu modal={false}>
+          </motion.div>
+          <Separator className="my-6" />
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mb-6"
+          >
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+              Event Gallery
+            </h2>
+            <div className="grid grid-cols-4 gap-2">
+              {images && images.length > 0 ? (
+                images.map((item, index) => (
+                  <motion.img
+                    key={index}
+                    src={`http://192.168.1.106:5600/images/${item.image}`}
+                    alt={`Event image ${index + 1}`}
+                    className="w-full h-24 object-cover rounded-lg cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => {
+                      setIsGalleryOpen(true);
+                      setCurrentIndex(index);
+                    }}
+                  />
+                ))
+              ) : (
+                <img
+                  src={fallBackImg}
+                  alt="fallback"
+                  className="w-full h-32 object-contain rounded-lg cursor-pointer"
+                />
+              )}
+            </div>
+          </motion.div>
+          <Separator className="my-6" />
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+              Speakers
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {speaker &&
+                speaker.length > 0 &&
+                speaker.map((item: Speaker, index: number) => (
+                  <motion.div
+                    key={index}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex items-center space-x-4 bg-gray-50 p-3 rounded-lg"
+                  >
+                    <Avatar className="w-12 h-12 border-2 border-white shadow-md">
+                      <AvatarImage src={item.photoURL} alt={item.name} />
+                      <AvatarFallback className="bg-gray-200 text-gray-600">
+                        {item.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium text-gray-800">{item.name}</p>
+                      <p className="text-sm text-gray-600">
+                        {item.designation}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="mt-8 flex justify-end items-center"
+          >
+            <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
                   <Share2 className="h-4 w-4 mr-2" />
@@ -168,9 +255,15 @@ export default function EventsById({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
+          </motion.div>
         </CardContent>
       </Card>
-    </div>
+      <ImageGallery
+        images={images}
+        isOpen={isGalleryOpen}
+        onClose={() => setIsGalleryOpen(false)}
+        index={currentIndex}
+      />
+    </motion.div>
   );
 }

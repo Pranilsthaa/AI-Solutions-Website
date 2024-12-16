@@ -2,11 +2,12 @@ import { useEventContext } from "@/context/eventsContext";
 import UpcomingEvents from "./UpcomingEvent";
 import PastEvents from "./pastEvent";
 import { useEffect, useState } from "react";
+import { Event } from "@/context/eventsContext";
 
 export default function Events() {
   const { getEvents, eventData } = useEventContext();
-  const [upcomingEvent, setUpcomingEvent] = useState([]);
-  const [pastEvent, setPastEvent] = useState([]);
+  const [upcomingEvent, setUpcomingEvent] = useState<Event[]>([]);
+  const [pastEvent, setPastEvent] = useState<Event[]>([]);
 
   useEffect(() => {
     getEvents();

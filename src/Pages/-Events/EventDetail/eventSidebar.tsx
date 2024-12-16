@@ -4,18 +4,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "motion/react";
+import EventImageModal from "./EventImageModal";
 
-type Event = {
+export type Event = {
   id: string;
   title: string;
   date: string;
+  banner_img: string;
   imageUrl: string;
+  start_time: string;
+  end_time: string;
 };
 
 interface EventSidebarProps {
-  upcomingEvents: Event[];
-  pastEvents: Event[];
-  onEventClick: (eventId: string) => void;
   fetchEventByID: () => void;
 }
 
@@ -57,24 +59,16 @@ function EventSidebar({ fetchEventByID }: EventSidebarProps) {
           <TabsTrigger value="past">Past</TabsTrigger>
         </TabsList>
         <TabsContent value="upcoming" className="flex-grow">
-          <ScrollArea className="h-[calc(100vh-8rem)]">
-            {upcomingEvents.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                onClick={fetchEventByID}
-              />
+          <ScrollArea className="h-[calc(100vh-8rem)] px-4">
+            {upcomingEvents.map((event, index) => (
+              <EventCard key={index} event={event} onClick={fetchEventByID} />
             ))}
           </ScrollArea>
         </TabsContent>
         <TabsContent value="past" className="flex-grow">
-          <ScrollArea className="h-[calc(100vh-8rem)]">
-            {pastEvents.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                onClick={fetchEventByID}
-              />
+          <ScrollArea className="h-[calc(100vh-8rem)] px-4">
+            {pastEvents.map((event, index) => (
+              <EventCard key={index} event={event} onClick={fetchEventByID} />
             ))}
           </ScrollArea>
         </TabsContent>
@@ -89,7 +83,7 @@ function EventCard({ event }: { event: Event; onClick: () => void }) {
       <Link to={`/events/${event.id}`}>
         <CardContent className="p-4 flex items-center space-x-4">
           <img
-            src={event.imageUrl}
+            src={`http://192.168.1.106:5600/images/${event.banner_img}`}
             alt={event.title}
             className="w-16 h-16 object-cover rounded"
           />

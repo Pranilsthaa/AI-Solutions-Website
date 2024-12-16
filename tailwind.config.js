@@ -7,6 +7,17 @@ export default {
 	],
 	theme: {
 		extend: {
+			animation: {
+				'gradient-flow': 'gradient-flow 8s infinite',
+				'gradient-flow-late': 'gradient-flow 12s infinite',
+			},
+			keyframes: {
+				'gradient-flow': {
+					'0%': { transform: 'translateY(-100%)' },
+					'100%': { transform: 'translateY(100%)' },
+				},
+			},
+
 			fontFamily: {
 				poppins: ["poppins"],
 				dosis: ["dosis"]

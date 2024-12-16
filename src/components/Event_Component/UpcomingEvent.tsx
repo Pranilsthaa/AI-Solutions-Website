@@ -30,6 +30,9 @@ interface Event {
 }
 
 function EventCard({ event }: { event: Event }) {
+  const handleShare = (platform: string) => {
+    console.log(`Sharing to ${platform}`);
+  };
   return (
     <Card className="relative h-96 overflow-hidden">
       <div className="absolute inset-0 flex">
