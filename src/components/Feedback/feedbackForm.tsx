@@ -21,10 +21,9 @@ import {
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import StarRating from "../StarRating";
-import axios from "axios";
 import { toast, Toaster } from "sonner";
 import { ScaleLoader } from "react-spinners";
-import { set } from "date-fns";
+import postData from "@/api/postData";
 
 interface FeedbackFormProps {
   isOpen: boolean;
@@ -46,19 +45,16 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Here you would typically send the feedback to your server
+
     try {
-      const response = await axios.post(
-        "https://sem5pd-production.up.railway.app/post_feedback",
-        {
-          name: name,
-          email: email,
-          service: service,
-          feedback: feedback,
-          url: url,
-          rating: rating,
-        }
-      );
+      const response = await postData("post_feedback", {
+        name: name,
+        email: email,
+        service: service,
+        feedback: feedback,
+        url: url,
+        rating: rating,
+      });
       if (response.status === 200) {
         toast.success("Feedback submitted successfully");
         setIsOpen(false);

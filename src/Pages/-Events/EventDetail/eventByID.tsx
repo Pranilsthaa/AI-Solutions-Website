@@ -71,7 +71,7 @@ export default function EventsById({
 
   const { eventById, speaker, images } = eventDetails;
   const event = eventById[0];
-
+  let api_base_url = import.meta.env.VITE_API_KEY;
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -88,7 +88,7 @@ export default function EventsById({
               initial={{ scale: 1.1 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
-              src={`https://sem5pd-production.up.railway.app/images/${event.banner_img}`}
+              src={`${api_base_url}images/${event.banner_img}`}
               alt={event.title}
               className="w-full h-64 sm:h-80 md:h-96 object-cover cursor-pointer"
               onClick={() => setIsGalleryOpen(true)}
@@ -180,7 +180,7 @@ export default function EventsById({
                 images.map((item, index) => (
                   <motion.img
                     key={index}
-                    src={`https://sem5pd-production.up.railway.app/images/${item.image}`}
+                    src={`${api_base_url}images/${item.image}`}
                     alt={`Event image ${index + 1}`}
                     className="w-full h-24 object-cover rounded-lg cursor-pointer"
                     whileHover={{ scale: 1.05 }}

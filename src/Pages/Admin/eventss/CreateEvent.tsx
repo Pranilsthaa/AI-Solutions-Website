@@ -19,6 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import CustomButton from "@/components/CustomButton";
 import { toast, Toaster } from "sonner";
+import postData from "@/api/postData";
 
 interface Speaker {
   name: string;
@@ -106,14 +107,11 @@ export default function CreateEvent() {
     if (formData.banner) {
       data.append("banner", formData.banner);
     }
-    formData.additionalImages.forEach((image, index) => {
+    formData.additionalImages.forEach((image) => {
       data.append(`additionalImages`, image);
     });
     try {
-      const response = await axios.post(
-        "https://sem5pd-production.up.railway.app/postevents",
-        data
-      );
+      const response = await postData("postevents", data);
       if (response.status === 200) {
         toast.success("Event created successfully");
       } else {

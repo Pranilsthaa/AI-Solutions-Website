@@ -5,8 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload } from "lucide-react";
-import axios from "axios";
 import { toast, Toaster } from "sonner";
+import postData from "@/api/postData";
 
 export default function PostArticle() {
   const [article, setArticle] = useState({
@@ -67,15 +67,7 @@ export default function PostArticle() {
     formData.append("description", article.description);
     formData.append("slug", article.title.split(" ").join("-").toLowerCase());
     try {
-      const response = await axios.post(
-        "https://sem5pd-production.up.railway.app/post_article",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await postData("post_article", formData);
       if (response.status === 200) {
         toast(response.data);
       }
@@ -83,7 +75,6 @@ export default function PostArticle() {
       console.log(error);
     }
   };
-  console.log(article);
 
   return (
     <div className={`min-h-screen p-8 transition-colors duration-200`}>

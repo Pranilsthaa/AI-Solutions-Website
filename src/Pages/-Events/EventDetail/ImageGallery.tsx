@@ -68,7 +68,7 @@ export function ImageGallery({
     setDirection(1);
     setCurrentIndex(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
   };
-
+  const base_api_url = import.meta.env.VITE_API_KEY;
   if (!isOpen) return null;
 
   return (
@@ -101,7 +101,7 @@ export function ImageGallery({
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={currentIndex}
-            src={`https://sem5pd-production.up.railway.app/images/${images[currentIndex].image}`}
+            src={`${base_api_url}images/${images[currentIndex].image}`}
             alt={`Event image ${currentIndex + 1}`}
             className="absolute top-0 left-0 w-full h-full object-contain"
             custom={direction}

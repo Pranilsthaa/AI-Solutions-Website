@@ -13,8 +13,6 @@ export default function Events() {
     getEvents();
   }, []);
 
-  console.log(eventData);
-
   useEffect(() => {
     if (eventData && eventData.length > 0) {
       const upcomingEvent = eventData.filter(

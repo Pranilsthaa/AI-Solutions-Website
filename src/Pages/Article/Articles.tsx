@@ -1,60 +1,16 @@
-import axios from "axios";
+import getData from "@/api/getData";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const relatedArticles = [
-  {
-    id: 1,
-    title: "AI Revolutionizing Retail",
-    description:
-      "Explore how AI is enhancing the retail sector with personalized recommendations, inventory optimization, and improved customer experiences.",
-    slug: "ai-revolutionizing-retail",
-    image: "/image/ai_in_retail.webp",
-  },
-  {
-    id: 2,
-    title: "AI in Sustainable Technology",
-    description:
-      "AI is playing a pivotal role in advancing sustainability by optimizing energy consumption, reducing waste, and enhancing resource management.",
-    slug: "ai-in-sustainable-technology",
-    image: "/image/ai_tech.jpg",
-  },
-  {
-    id: 3,
-    title: "Shaping The Future With AI in Education",
-    description:
-      "Discover how AI is revolutionizing education by creating personalized learning experiences and improving accessibility for students worldwide.",
-    slug: "shaping-the-future-with-ai-education",
-    image: "/image/ai_in_education.png",
-  },
-  {
-    id: 4,
-    title: "Enhancing Customer Experience with AI",
-    description:
-      "Customer experience is the cornerstone of business success, and AI is reshaping how companies interact with their customers through advanced technologies.",
-    slug: "enhancing-customer-experience-with-ai",
-    image: "/image/ai_customer.webp",
-  },
-
-  {
-    id: 5,
-    title: "AI Empowering the Finance Sector",
-    description:
-      "The finance industry is undergoing a radical transformation with AI enabling fraud detection, risk assessment, and real-time market analysis.",
-    slug: "ai-empowering-finance-sector",
-    image: "/image/ai_in_financial_forecasting.jpg",
-  },
-];
-
 export default function ArticleSection() {
   const [articles, setArticles] = useState([]);
 
+  const base_api_url = import.meta.env.VITE_API_KEY;
+
   const fetchArticles = async () => {
     try {
-      const response = await axios.get(
-        "https://sem5pd-production.up.railway.app/getarticles"
-      );
+      const response = await getData("getarticles");
       if (response.status == 200) {
         setArticles(response.data);
       }
@@ -78,7 +34,7 @@ export default function ArticleSection() {
         <div className="grid gap-10 md:grid-cols-2 lg:gap-16 items-start">
           <div className="space-y-4">
             <img
-              src={`https://sem5pd-production.up.railway.app/images/${articles[0]?.article_image}`}
+              src={`${base_api_url}images/${articles[0]?.article_image}`}
               alt="AI in Healthcare"
               width={600}
               height={400}
@@ -101,7 +57,7 @@ export default function ArticleSection() {
               return (
                 <div className="flex gap-4 items-start" key={index}>
                   <img
-                    src={`https://sem5pd-production.up.railway.app/images/${article?.article_image}`}
+                    src={`${base_api_url}images/${article?.article_image}`}
                     alt={article?.title}
                     width={200}
                     height={150}

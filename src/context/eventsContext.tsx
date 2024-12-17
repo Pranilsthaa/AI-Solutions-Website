@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useState } from "react";
 import axios from "axios";
+import getData from "@/api/getData";
 
 // Define the API response type
 export interface Event {
@@ -28,12 +29,10 @@ const EventContext = createContext<EventContextType>({
 
 const EventProvider = ({ children }: { children: React.ReactNode }) => {
   const [eventData, setEventData] = useState<Event[]>([]);
-  console.log(eventData);
+
   const getEvents = async () => {
     try {
-      const response = await axios.get<Event[]>(
-        "https://sem5pd-production.up.railway.app/getevents"
-      );
+      const response = await getData("getevents");
       if (response.status == 200) {
         setEventData(response.data);
       }

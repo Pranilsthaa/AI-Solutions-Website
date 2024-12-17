@@ -21,8 +21,8 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import countries from "world-countries";
-import axios from "axios";
 import { toast, Toaster } from "sonner";
+import getData from "@/api/getData";
 
 const formSchema = z.object({
   id: z.string().optional(),
@@ -85,10 +85,7 @@ export default function ClientInquiryForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const response = await axios.post(
-        "https://sem5pd-production.up.railway.app/post_inquiry",
-        values
-      );
+      const response = await getData("post_inquiry", values);
       if (response) {
         toast("Inquiry submitted successfully");
       }

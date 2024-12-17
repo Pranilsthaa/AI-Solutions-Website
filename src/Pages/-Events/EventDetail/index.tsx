@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import EventsById from "./eventByID";
 import EventSidebar from "./eventSidebar";
-import axios from "axios";
 import { useParams } from "react-router-dom";
-import { set } from "date-fns";
+import getData from "@/api/getData";
 
 export default function EventDetailPage() {
   const [eventDetails, setEventDetails] = useState(null);
@@ -13,10 +12,10 @@ export default function EventDetailPage() {
   const fetchEventByID = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `https://sem5pd-production.up.railway.app/getevents/${id}`
-      );
-      setEventDetails(response.data);
+      const response = await getData(`getevents/${id}`);
+      if (response.status == 200) {
+        setEventDetails(response.data);
+      }
     } catch (error) {
       console.error("Failed to fetch event by id", error);
     } finally {
@@ -27,8 +26,6 @@ export default function EventDetailPage() {
   useEffect(() => {
     fetchEventByID();
   }, [id]);
-
-  console.log(eventDetails);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-white to-green-400 p-4 sm:p-6 lg:p-8 flex">

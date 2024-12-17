@@ -1,3 +1,4 @@
+import getData from "@/api/getData";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -26,9 +27,7 @@ function EventSidebar({ fetchEventByID }: EventSidebarProps) {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(
-        `https://sem5pd-production.up.railway.app/getevents`
-      );
+      const response = await getData("getevents");
       setEventDetails(response.data);
     } catch (error) {
       console.error("Failed to fetch event by id", error);
@@ -78,12 +77,13 @@ function EventSidebar({ fetchEventByID }: EventSidebarProps) {
 }
 
 function EventCard({ event }: { event: Event; onClick: () => void }) {
+  const api_base_url = import.meta.env.VITE_API_KEY;
   return (
     <Card className="mb-4 cursor-pointer hover:bg-accent">
       <Link to={`/events/${event.id}`}>
         <CardContent className="p-4 flex items-center space-x-4">
           <img
-            src={`https://sem5pd-production.up.railway.app/images/${event.banner_img}`}
+            src={`${api_base_url}images/${event.banner_img}`}
             alt={event.title}
             className="w-16 h-16 object-cover rounded"
           />

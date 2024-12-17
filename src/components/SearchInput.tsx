@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/popover";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import getData from "@/api/getData";
 
 export default function SearchInput() {
   const [open, setOpen] = useState(false); // State for popover visibility
@@ -25,13 +26,9 @@ export default function SearchInput() {
   const search = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "https://sem5pd-production.up.railway.app/searchArticle",
-        {
-          params: { key: encodeURIComponent(value.trim()) }, // Pass value as query parameter
-        }
-      );
-
+      const response = await getData("searchArticle", {
+        key: encodeURIComponent(value.trim()),
+      });
       if (response.status == 200) {
         setRelatedTerms(response.data);
       }

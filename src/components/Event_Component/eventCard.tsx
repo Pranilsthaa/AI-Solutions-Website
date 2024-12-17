@@ -29,10 +29,12 @@ export default function EventCard({ event }: EventCardProps) {
     setTimeout(() => setIsShared(false), 2000);
   };
 
+  const api_base_url = import.meta.env.VITE_API_KEY;
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <img
-        src={`https://sem5pd-production.up.railway.app/images/${event.banner_img}`}
+        src={`${api_base_url}images/${event.banner_img}`}
         alt={event.title}
         width={600}
         height={400}

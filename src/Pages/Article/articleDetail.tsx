@@ -2,9 +2,8 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link, useParams } from "react-router-dom";
-import { articles } from "./articleData";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import getData from "@/api/getData";
 
 export default function ArticleDetailsPage() {
   const { slug } = useParams();
@@ -13,9 +12,7 @@ export default function ArticleDetailsPage() {
 
   const fetchArticles = async () => {
     try {
-      const response = await axios.get(
-        `https://sem5pd-production.up.railway.app/getarticles`
-      );
+      const response = await getData("getarticles");
       if (response.status == 200) {
         setArticle(response.data);
       }
@@ -32,7 +29,7 @@ export default function ArticleDetailsPage() {
   const articleDetail = article.filter((article: { slug: "" }) => {
     return article.slug === slug;
   });
-  console.log(articleDetail);
+  const base_api_url = import.meta.env.VITE_API_KEY;
   if (!article) return <div>Article not found</div>;
   return (
     <div className="container mx-auto px-4 pb-8 pt-24 ">
@@ -47,7 +44,7 @@ export default function ArticleDetailsPage() {
           By {articleDetail[0]?.Author} | {articleDetail[0]?.Date.split("T")[0]}
         </div>
         <img
-          src={`https://sem5pd-production.up.railway.app/images/${articleDetail[0]?.article_image}`}
+          src={`${base_api_url}images/${articleDetail[0]?.article_image}`}
           alt={articleDetail[0]?.title}
           width={800}
           height={400}
@@ -73,7 +70,7 @@ export default function ArticleDetailsPage() {
                   <CardTitle>{relatedArticle?.title}</CardTitle>
                 </CardHeader>
                 <img
-                  src={`https://sem5pd-production.up.railway.app/images/${relatedArticle?.article_image}`}
+                  src={`${base_api_url}images/${relatedArticle?.article_image}`}
                   alt={relatedArticle?.title}
                   className="w-full h-48 object-cover rounded-lg mb-8"
                 />

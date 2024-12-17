@@ -33,6 +33,8 @@ function EventCard({ event }: { event: Event }) {
   const handleShare = (platform: string) => {
     console.log(`Sharing to ${platform}`);
   };
+
+  const api_base_url = import.meta.env.VITE_API_KEY;
   return (
     <Card className="relative h-96 overflow-hidden">
       <div className="absolute inset-0 flex">
@@ -89,7 +91,7 @@ function EventCard({ event }: { event: Event }) {
           to={`${event.id}`}
           className="w-4/5 bg-cover bg-center hover:sepia transition-all duration-500"
           style={{
-            backgroundImage: `url(https://sem5pd-production.up.railway.app/images/${event.banner_img})`,
+            backgroundImage: `url(${api_base_url}images/${event.banner_img})`,
           }}
         />
       </div>
