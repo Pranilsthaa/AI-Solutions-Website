@@ -56,7 +56,7 @@ function Navbar() {
           >
             <Link to={"/"}>
               <img
-                src="/image/finalPng1.png"
+                src="/image/finalpng1.png"
                 alt=""
                 className=" w-[180px] h-[60px] object-cover"
               />
