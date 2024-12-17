@@ -46,7 +46,7 @@ interface EventDetailsProps {
   speaker: Speaker[];
 }
 
-export const fallBackImg = "/public/image/fallback.jpg";
+export const fallBackImg = "/image/fallback.jpg";
 
 export default function EventsById({
   themeColor = "purple",
