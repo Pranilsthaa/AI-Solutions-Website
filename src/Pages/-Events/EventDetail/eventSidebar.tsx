@@ -4,8 +4,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "motion/react";
-import EventImageModal from "./EventImageModal";
 
 export type Event = {
   id: string;
@@ -29,7 +27,7 @@ function EventSidebar({ fetchEventByID }: EventSidebarProps) {
   const fetchEvents = async () => {
     try {
       const response = await axios.get(
-        `sem5pd-production.up.railway.app/getevents`
+        `https://sem5pd-production.up.railway.app/getevents`
       );
       setEventDetails(response.data);
     } catch (error) {
@@ -85,7 +83,7 @@ function EventCard({ event }: { event: Event; onClick: () => void }) {
       <Link to={`/events/${event.id}`}>
         <CardContent className="p-4 flex items-center space-x-4">
           <img
-            src={`sem5pd-production.up.railway.app/images/${event.banner_img}`}
+            src={`https://sem5pd-production.up.railway.app/images/${event.banner_img}`}
             alt={event.title}
             className="w-16 h-16 object-cover rounded"
           />

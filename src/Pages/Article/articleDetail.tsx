@@ -14,7 +14,7 @@ export default function ArticleDetailsPage() {
   const fetchArticles = async () => {
     try {
       const response = await axios.get(
-        `sem5pd-production.up.railway.app/getarticles`
+        `https://sem5pd-production.up.railway.app/getarticles`
       );
       if (response.status == 200) {
         setArticle(response.data);
@@ -47,7 +47,7 @@ export default function ArticleDetailsPage() {
           By {articleDetail[0]?.Author} | {articleDetail[0]?.Date.split("T")[0]}
         </div>
         <img
-          src={`sem5pd-production.up.railway.app/images/${articleDetail[0]?.article_image}`}
+          src={`https://sem5pd-production.up.railway.app/images/${articleDetail[0]?.article_image}`}
           alt={articleDetail[0]?.title}
           width={800}
           height={400}
@@ -73,7 +73,7 @@ export default function ArticleDetailsPage() {
                   <CardTitle>{relatedArticle?.title}</CardTitle>
                 </CardHeader>
                 <img
-                  src={`sem5pd-production.up.railway.app/images/${relatedArticle?.article_image}`}
+                  src={`https://sem5pd-production.up.railway.app/images/${relatedArticle?.article_image}`}
                   alt={relatedArticle?.title}
                   className="w-full h-48 object-cover rounded-lg mb-8"
                 />

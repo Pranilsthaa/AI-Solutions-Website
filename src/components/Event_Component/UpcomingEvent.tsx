@@ -89,7 +89,7 @@ function EventCard({ event }: { event: Event }) {
           to={`${event.id}`}
           className="w-4/5 bg-cover bg-center hover:sepia transition-all duration-500"
           style={{
-            backgroundImage: `url(sem5pd-production.up.railway.app/images/${event.banner_img})`,
+            backgroundImage: `url(https://sem5pd-production.up.railway.app/images/${event.banner_img})`,
           }}
         />
       </div>

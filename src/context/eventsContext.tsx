@@ -15,7 +15,7 @@ export interface Event {
 }
 
 interface EventContextType {
-  getEvents: () => Promise<Event | null>;
+  getEvents: () => void;
   eventData: Event[];
 }
 
@@ -28,14 +28,15 @@ const EventContext = createContext<EventContextType>({
 
 const EventProvider = ({ children }: { children: React.ReactNode }) => {
   const [eventData, setEventData] = useState<Event[]>([]);
-
+  console.log(eventData);
   const getEvents = async () => {
     try {
       const response = await axios.get<Event[]>(
-        "sem5pd-production.up.railway.app/getevents"
+        "https://sem5pd-production.up.railway.app/getevents"
       );
-      setEventData(response.data);
-      return null;
+      if (response.status == 200) {
+        setEventData(response.data);
+      }
     } catch (error) {
       console.error("Error fetching event by ID:", error);
       return null;

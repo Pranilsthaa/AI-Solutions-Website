@@ -101,7 +101,7 @@ export function ImageGallery({
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={currentIndex}
-            src={`sem5pd-production.up.railway.app/images/${images[currentIndex].image}`}
+            src={`https://sem5pd-production.up.railway.app/images/${images[currentIndex].image}`}
             alt={`Event image ${currentIndex + 1}`}
             className="absolute top-0 left-0 w-full h-full object-contain"
             custom={direction}

@@ -111,7 +111,7 @@ export default function CreateEvent() {
     });
     try {
       const response = await axios.post(
-        "sem5pd-production.up.railway.app/postevents",
+        "https://sem5pd-production.up.railway.app/postevents",
         data
       );
       if (response.status === 200) {

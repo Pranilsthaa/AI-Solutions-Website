@@ -86,7 +86,7 @@ export default function ClientInquiryForm() {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "sem5pd-production.up.railway.app/post_inquiry",
+        "https://sem5pd-production.up.railway.app/post_inquiry",
         values
       );
       if (response) {

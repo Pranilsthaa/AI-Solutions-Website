@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ImageGallery } from "./ImageGallery";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Speaker {
   name: string;
@@ -50,9 +51,11 @@ export const fallBackImg = "/public/image/fallback.jpg";
 export default function EventsById({
   themeColor = "purple",
   eventDetails,
+  loading,
 }: {
   themeColor?: string;
   eventDetails: EventDetailsProps | null;
+  loading: boolean;
 }) {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -78,15 +81,20 @@ export default function EventsById({
     >
       <Card className="w-full max-w-4xl bg-white shadow-xl rounded-2xl overflow-hidden">
         <div className="relative">
-          <motion.img
-            initial={{ scale: 1.1 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5 }}
-            src={`sem5pd-production.up.railway.app/images/${event.banner_img}`}
-            alt={event.title}
-            className="w-full h-64 sm:h-80 md:h-96 object-cover cursor-pointer"
-            onClick={() => setIsGalleryOpen(true)}
-          />
+          {loading ? (
+            <Skeleton className="h-64 sm:h-80 md:h-96" />
+          ) : (
+            <motion.img
+              initial={{ scale: 1.1 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5 }}
+              src={`https://sem5pd-production.up.railway.app/images/${event.banner_img}`}
+              alt={event.title}
+              className="w-full h-64 sm:h-80 md:h-96 object-cover cursor-pointer"
+              onClick={() => setIsGalleryOpen(true)}
+            />
+          )}
+
           <div className="absolute top-4 left-4">
             <Button
               variant="outline"
@@ -172,7 +180,7 @@ export default function EventsById({
                 images.map((item, index) => (
                   <motion.img
                     key={index}
-                    src={`sem5pd-production.up.railway.app/images/${item.image}`}
+                    src={`https://sem5pd-production.up.railway.app/images/${item.image}`}
                     alt={`Event image ${index + 1}`}
                     className="w-full h-24 object-cover rounded-lg cursor-pointer"
                     whileHover={{ scale: 1.05 }}

@@ -3,19 +3,24 @@ import EventsById from "./eventByID";
 import EventSidebar from "./eventSidebar";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { set } from "date-fns";
 
 export default function EventDetailPage() {
   const [eventDetails, setEventDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
   const fetchEventByID = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
-        `sem5pd-production.up.railway.app/getevents/${id}`
+        `https://sem5pd-production.up.railway.app/getevents/${id}`
       );
       setEventDetails(response.data);
     } catch (error) {
       console.error("Failed to fetch event by id", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,10 +36,11 @@ export default function EventDetailPage() {
         <div className="w-[70%]">
           <EventsById
             eventDetails={eventDetails || null}
+            loading={loading}
             //   onBack={handleBack}
           />
         </div>
-        <div className="w-[30%]">
+        <div className="w-[30%] h-[90vh]">
           <EventSidebar fetchEventByID={fetchEventByID} />
         </div>
       </div>

@@ -13,15 +13,19 @@ export default function Events() {
     getEvents();
   }, []);
 
+  console.log(eventData);
+
   useEffect(() => {
-    const upcomingEvent = eventData.filter(
-      (event) => new Date(event.date) > new Date()
-    );
-    const pastEvent = eventData.filter(
-      (event) => new Date(event.date) < new Date()
-    );
-    setUpcomingEvent(upcomingEvent);
-    setPastEvent(pastEvent);
+    if (eventData && eventData.length > 0) {
+      const upcomingEvent = eventData.filter(
+        (event) => new Date(event.date) > new Date()
+      );
+      const pastEvent = eventData.filter(
+        (event) => new Date(event.date) < new Date()
+      );
+      setUpcomingEvent(upcomingEvent);
+      setPastEvent(pastEvent);
+    }
   }, [eventData]);
 
   return (

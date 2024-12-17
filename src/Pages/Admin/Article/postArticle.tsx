@@ -68,7 +68,7 @@ export default function PostArticle() {
     formData.append("slug", article.title.split(" ").join("-").toLowerCase());
     try {
       const response = await axios.post(
-        "sem5pd-production.up.railway.app/post_article",
+        "https://sem5pd-production.up.railway.app/post_article",
         formData,
         {
           headers: {
