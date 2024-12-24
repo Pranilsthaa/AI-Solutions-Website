@@ -12,8 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, User } from "lucide-react";
 import postData from "@/api/postData";
 import { useNavigate } from "react-router-dom";
-import { toast, Toaster } from "sonner";
-import { json } from "stream/consumers";
+import { toast } from "sonner";
 
 export function AdminLoginForm() {
   const [username, setUsername] = useState("");
@@ -50,7 +49,7 @@ export function AdminLoginForm() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <Card className="backdrop-blur-sm bg-white/30 w-1/2">
+      <Card className="backdrop-blur-sm bg-white/30 w-1/3">
         <CardHeader className="pb-2">
           <div className="w-full flex justify-center mb-4">
             <Lock className="h-12 w-12 text-primary" />
@@ -78,7 +77,7 @@ export function AdminLoginForm() {
                   placeholder="Username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="pl-10 py-6"
+                  className="pl-10 py-6 font-poppins"
                   required
                 />
               </div>
@@ -95,7 +94,7 @@ export function AdminLoginForm() {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 py-6"
+                  className="pl-10 py-6 font-poppins"
                   required
                 />
               </div>

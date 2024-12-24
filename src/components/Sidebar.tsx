@@ -31,6 +31,7 @@ export function Sidebar() {
   };
   const tokenData = localStorage.getItem("token");
   const parsedToken = tokenData && JSON.parse(tokenData);
+  if (!parsedToken) return null;
   const isSuperAdmin = parsedToken && parsedToken.role === "superadmin";
   return (
     <div className="flex h-screen">

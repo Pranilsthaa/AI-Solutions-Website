@@ -13,4 +13,4 @@ const postAuthData = async(route: string, data?: any) => {
     return response;
 }
 
-export default postAuthData;    
+export default postAuthData;

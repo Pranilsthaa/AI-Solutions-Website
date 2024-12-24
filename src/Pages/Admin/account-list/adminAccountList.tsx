@@ -70,6 +70,20 @@ export default function AdminAccountList() {
     setIsModalOpen(true);
   };
 
+  const handleReactivate = async (id: string) => {
+    try {
+      const response = await postAuthData("reactivateAdminAccount", { id });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getAdminAccounts();
+      } else {
+        toast.error("An error occurred");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getAdminAccounts = async () => {
     try {
       const response = await getAuthData("getAdminAccounts");
@@ -121,23 +135,35 @@ export default function AdminAccountList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {accounts.map((account: AdminAccount) => (
-              <TableRow key={account.id}>
-                <TableCell>{account.username}</TableCell>
-                <TableCell>
-                  <Badge variant="outline">{account.designation}</Badge>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    onClick={() => handleTerminate(account)}
-                    variant="destructive"
-                    size="sm"
-                  >
-                    Terminate
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {accounts &&
+              accounts.length > 0 &&
+              accounts?.map((account: AdminAccount) => (
+                <TableRow key={account.id}>
+                  <TableCell>{account.username}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{account.designation}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    {account.role == "admin" ? (
+                      <Button
+                        onClick={() => handleTerminate(account)}
+                        variant="destructive"
+                        size="sm"
+                      >
+                        Terminate
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => handleReactivate(account.id)}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Reactivate
+                      </Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </CardContent>
