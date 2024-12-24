@@ -13,17 +13,19 @@ import { Lock, User } from "lucide-react";
 import postData from "@/api/postData";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { ScaleLoader } from "react-spinners";
 
 export function AdminLoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-
+    setLoading(true);
     try {
       const response = await postData("login", {
         username: username,
@@ -44,6 +46,8 @@ export function AdminLoginForm() {
       }
     } catch (err) {
       toast.error(err.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,8 +105,12 @@ export function AdminLoginForm() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full py-6 text-lg">
-              Login
+            <Button
+              type="submit"
+              className="w-full py-6 text-lg"
+              disabled={loading}
+            >
+              {loading ? <ScaleLoader color="#fff" height={12} /> : "Login"}
             </Button>
           </CardFooter>
         </form>

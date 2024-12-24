@@ -6,12 +6,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { ScaleLoader } from "react-spinners";
 
 interface ConfirmTerminationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   accountName: string;
+  loading: boolean;
 }
 
 export default function ConfirmTerminationModal({
@@ -19,6 +21,7 @@ export default function ConfirmTerminationModal({
   onClose,
   onConfirm,
   accountName,
+  loading,
 }: ConfirmTerminationModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -39,8 +42,17 @@ export default function ConfirmTerminationModal({
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="destructive" onClick={onConfirm}>
-            Terminate Account
+          <Button
+            variant="destructive"
+            onClick={onConfirm}
+            disabled={loading}
+            className="min-w-[150px]"
+          >
+            {loading ? (
+              <ScaleLoader color="white" height={8} />
+            ) : (
+              "Terminate Account"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

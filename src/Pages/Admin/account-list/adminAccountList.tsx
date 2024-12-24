@@ -18,6 +18,8 @@ import { CreateAdminModal } from "./createAdminModal";
 import getAuthData from "@/api/getAuthData";
 import postAuthData from "@/api/postAuthData";
 import { toast } from "sonner";
+import { ScaleLoader } from "react-spinners";
+import { set } from "date-fns";
 
 interface AdminAccount {
   id: string;
@@ -38,6 +40,7 @@ export default function AdminAccountList() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [selectedID, setSelectedID] = useState("");
 
   const createAdminAccount = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,25 +68,6 @@ export default function AdminAccountList() {
     }
   };
 
-  const handleTerminate = (account: AdminAccount) => {
-    setSelectedAccount(account);
-    setIsModalOpen(true);
-  };
-
-  const handleReactivate = async (id: string) => {
-    try {
-      const response = await postAuthData("reactivateAdminAccount", { id });
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        getAdminAccounts();
-      } else {
-        toast.error("An error occurred");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getAdminAccounts = async () => {
     try {
       const response = await getAuthData("getAdminAccounts");
@@ -94,11 +78,36 @@ export default function AdminAccountList() {
       console.error(error);
     }
   };
+
+  const handleTerminate = (account: AdminAccount) => {
+    setSelectedAccount(account);
+    setIsModalOpen(true);
+  };
+
+  const handleReactivate = async (id: string) => {
+    setLoading(true);
+    setSelectedID(id);
+    try {
+      const response = await postAuthData("reactivateAdminAccount", { id });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getAdminAccounts();
+      } else {
+        toast.error("An error occurred");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getAdminAccounts();
   }, []);
 
   const confirmTermination = async () => {
+    setLoading(true);
     try {
       if (selectedAccount) {
         const response = await postAuthData("terminateAdminAccount", {
@@ -113,6 +122,7 @@ export default function AdminAccountList() {
       console.log(error);
     } finally {
       setSelectedAccount(null);
+      setLoading(false);
       setIsModalOpen(false);
     }
   };
@@ -158,7 +168,11 @@ export default function AdminAccountList() {
                         variant="outline"
                         size="sm"
                       >
-                        Reactivate
+                        {loading && account.id == selectedID ? (
+                          <ScaleLoader color="black" height={8} />
+                        ) : (
+                          "Reactivate"
+                        )}
                       </Button>
                     )}
                   </TableCell>
@@ -172,6 +186,7 @@ export default function AdminAccountList() {
         onClose={() => setIsModalOpen(false)}
         onConfirm={confirmTermination}
         accountName={selectedAccount?.username || ""}
+        loading={loading}
       />
       <CreateAdminModal
         isOpen={isCreateModalOpen}
