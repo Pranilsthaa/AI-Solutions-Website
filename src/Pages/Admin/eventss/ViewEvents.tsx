@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -21,30 +22,33 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
+import getData from "@/api/getData";
 
-const events = [
-  {
-    id: 1,
-    title: "Summer Music Festival",
-    date: "2023-07-15",
-    location: "Central Park",
-  },
-  {
-    id: 2,
-    title: "Tech Conference 2023",
-    date: "2023-09-22",
-    location: "Convention Center",
-  },
-  {
-    id: 3,
-    title: "Food & Wine Expo",
-    date: "2023-10-05",
-    location: "City Hall",
-  },
-];
+type eventData = {
+  id: number;
+  title: string;
+  date: string;
+  location: string;
+}[];
 
 export default function ViewEvents() {
   const [eventToDelete, setEventToDelete] = useState<number | null>(null);
+  const [events, setEvents] = useState<eventData>([]);
+
+  const fetchEvents = async () => {
+    try {
+      const response = await getData("getevents-admin");
+      if (response.status == 200) {
+        setEvents(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const handleDelete = () => {
     // In a real application, you would delete the event here
@@ -76,7 +80,7 @@ export default function ViewEvents() {
                 <TableCell>
                   <div className="flex space-x-2">
                     <Button asChild variant="outline">
-                      <Link to={`/admin/events/edit/${event.id}`}>Edit</Link>
+                      <Link to={`/admin/events-edit/${event.id}`}>Edit</Link>
                     </Button>
                     <Dialog>
                       <DialogTrigger asChild>
@@ -98,15 +102,22 @@ export default function ViewEvents() {
                           </DialogDescription>
                         </DialogHeader>
                         <DialogFooter>
-                          <Button
-                            variant="outline"
-                            onClick={() => setEventToDelete(null)}
-                          >
-                            Cancel
-                          </Button>
-                          <Button variant="destructive" onClick={handleDelete}>
-                            Delete
-                          </Button>
+                          <DialogClose>
+                            <Button
+                              variant="outline"
+                              onClick={() => setEventToDelete(null)}
+                            >
+                              Cancel
+                            </Button>
+                          </DialogClose>
+                          <DialogClose>
+                            <Button
+                              variant="destructive"
+                              onClick={handleDelete}
+                            >
+                              Delete
+                            </Button>
+                          </DialogClose>
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>

@@ -16,6 +16,11 @@ import EventDetailPage from "./Pages/-Events/EventDetail/index.tsx";
 import ArticleSection from "./Pages/Article/Articles.tsx";
 import ArticleDetailsPage from "./Pages/Article/articleDetail.tsx";
 import PostArticle from "./Pages/Admin/Article/postArticle.tsx";
+import AdminAccountList from "./Pages/Admin/account-list/adminAccountList.tsx";
+import { AdminLoginForm } from "./Pages/Admin/adminLogin/adminLogin.tsx";
+import ProtectedRoute from "./hooks/checkAuth.tsx";
+import { Toaster } from "sonner";
+import CheckSuperAdmin from "./hooks/checkSuperAdmin.tsx";
 
 const router = createBrowserRouter(
   [
@@ -51,12 +56,28 @@ const router = createBrowserRouter(
       ],
     },
     {
+      path: "/login",
+      element: <AdminLoginForm />,
+    },
+    {
       path: "/admin",
-      element: <Sidebar />,
+      element: (
+        <ProtectedRoute>
+          <Sidebar />
+        </ProtectedRoute>
+      ),
       children: [
         {
           path: "/admin",
           element: <AdminDashboard />,
+        },
+        {
+          path: "accounts",
+          element: (
+            <CheckSuperAdmin>
+              <AdminAccountList />
+            </CheckSuperAdmin>
+          ),
         },
         {
           path: "events",
@@ -64,7 +85,11 @@ const router = createBrowserRouter(
         },
         {
           path: "events_create",
-          element: <CreateEvent />,
+          element: <CreateEvent key="create-event" />,
+        },
+        {
+          path: "events-edit/:id",
+          element: <CreateEvent key="view-event" />,
         },
         {
           path: "inquiries",
@@ -95,5 +120,6 @@ const router = createBrowserRouter(
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} future={{ v7_startTransition: true }} />
+    <Toaster />
   </StrictMode>
 );

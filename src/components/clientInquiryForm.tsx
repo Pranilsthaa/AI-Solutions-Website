@@ -98,7 +98,6 @@ export default function ClientInquiryForm() {
 
   return (
     <Form {...form}>
-      <Toaster />
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 z-50">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <FormField

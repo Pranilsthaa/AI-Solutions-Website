@@ -1,7 +1,7 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { CalendarIcon, X, Plus } from "lucide-react";
+import { X, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,6 +20,8 @@ import axios from "axios";
 import CustomButton from "@/components/CustomButton";
 import { toast, Toaster } from "sonner";
 import postData from "@/api/postData";
+import { useLocation, useParams } from "react-router-dom";
+import getData from "@/api/getData";
 
 interface Speaker {
   name: string;
@@ -32,9 +34,15 @@ interface FormData {
   description: string;
   startTime: string;
   endTime: string;
-  date: Date | null;
+  date: string | null;
   location: string;
-  banner: File | null;
+  existingImage: {
+    id: number;
+    image: string;
+    event_id: number;
+  }[];
+  banner: File | undefined;
+  existingBanner?: string;
   additionalImages: File[];
   speakers: Speaker[];
 }
@@ -47,12 +55,13 @@ export default function CreateEvent() {
     endTime: "",
     date: null,
     location: "",
-    banner: null,
+    banner: undefined,
+    existingImage: [],
     additionalImages: [],
     speakers: [{ name: "", photo: "", designation: "" }],
   });
 
-  const [isOpen, setIsOpen] = useState(false);
+  // console.log(formData);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -82,6 +91,7 @@ export default function CreateEvent() {
           ...prevData,
           banner: e.target.files![0],
         }));
+        setFormData((prevData) => ({ ...prevData, existingBanner: undefined }));
       } else if (e.target.name === "additionalImages") {
         setFormData((prevData) => ({
           ...prevData,
@@ -138,6 +148,54 @@ export default function CreateEvent() {
     }
   };
 
+  const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+    data.append("startTime", formData.startTime);
+    data.append("endTime", formData.endTime);
+    data.append("date", formData.date ? formData.date : "");
+    data.append("location", formData.location);
+    data.append("speakers", JSON.stringify(formData.speakers));
+    if (formData.banner) {
+      data.append("banner", formData.banner);
+    }
+    if (formData.existingBanner) {
+      data.append("existingBanner", formData.existingBanner);
+    }
+    formData.additionalImages.forEach((image) => {
+      data.append(`additionalImages`, image);
+    });
+    formData.existingImage.forEach((image) => {
+      data.append(`existingImages`, JSON.stringify(image));
+    });
+    try {
+      const response = await postData(`edit-event/${id}`, data);
+      if (response.status === 200) {
+        toast.success("Event Edited successfully");
+      } else {
+        console.log(`Failed to create event: ${response.statusText}`);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.error("Error data:", error.response.data);
+          console.error("Error status:", error.response.status);
+          console.error("Error headers:", error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error("Error request:", error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error("Error message:", error.message);
+        }
+      } else {
+        console.error("Unexpected error:", error);
+      }
+    }
+  };
+
   const addSpeaker = () => {
     setFormData((prevData) => ({
       ...prevData,
@@ -155,16 +213,88 @@ export default function CreateEvent() {
     }));
   };
 
-  const removeAdditionalImage = (index: number) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      additionalImages: prevData.additionalImages.filter((_, i) => i !== index),
-    }));
+  const removeAdditionalImage = (index: number, params: string) => {
+    if (params == "ad") {
+      setFormData((prevData) => ({
+        ...prevData,
+        additionalImages: prevData.additionalImages.filter(
+          (_, i) => i !== index
+        ),
+      }));
+    } else if (params == "ex") {
+      setFormData((prevData) => ({
+        ...prevData,
+        existingImage:
+          prevData.existingImage?.filter((_, i) => i !== index) || [],
+      }));
+    }
   };
+
+  const { id } = useParams();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    setFormData({
+      title: "",
+      description: "",
+      startTime: "",
+      endTime: "",
+      date: null,
+      location: "",
+      existingImage: [],
+      banner: undefined,
+      additionalImages: [],
+      speakers: [{ name: "", photo: "", designation: "" }],
+    });
+  }, [pathname]);
+
+  const isEdit = pathname.includes("events-edit") && id !== undefined;
+
+  useEffect(() => {
+    if (isEdit) {
+      const fetchEvent = async () => {
+        try {
+          const response = await getData(`getevents/${id}`);
+          if (response.status == 200) {
+            setFormData({
+              title: response.data.eventById[0].title,
+              description: response.data.eventById[0].description,
+              startTime: response.data.eventById[0].start_time,
+              endTime: response.data.eventById[0].end_time,
+              date: response.data.eventById[0].date,
+              location: response.data.eventById[0].location,
+              existingBanner: response.data.eventById[0].banner_img,
+              existingImage: response.data.images,
+              additionalImages: [],
+              banner: undefined,
+              speakers: response.data.speaker,
+            });
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchEvent();
+    }
+  }, [id]);
+
+  // console.log(formData);
+
+  useEffect(() => {
+    // Clean up the URL object
+    return () => {
+      if (formData.banner) {
+        if (typeof formData.banner === "string") {
+          URL.revokeObjectURL(formData.banner);
+        }
+      }
+    };
+  }, [formData.banner]);
+
+  const api_base_url = import.meta.env.VITE_API_KEY;
 
   return (
     <Card className="w-full max-w-3xl mx-auto">
-      <Toaster />
       <CardHeader>
         <CardTitle className="text-2xl">Create New Event</CardTitle>
         <CardDescription>
@@ -172,7 +302,10 @@ export default function CreateEvent() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form
+          onSubmit={isEdit ? handleEdit : handleSubmit}
+          className="space-y-6"
+        >
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="title">Event Title</Label>
@@ -256,10 +389,21 @@ export default function CreateEvent() {
                   accept="image/*"
                   className="w-full"
                 />
-                {formData.banner && (
+
+                {!isEdit ? (
                   <img
-                    src={URL.createObjectURL(formData.banner)}
+                    src={
+                      formData.banner
+                        ? URL.createObjectURL(formData?.banner)
+                        : ""
+                    }
                     alt="Event Banner Preview"
+                    className="w-20 h-20 object-cover rounded"
+                  />
+                ) : (
+                  <img
+                    src={api_base_url + "images/" + formData?.existingBanner}
+                    alt="Event Banner"
                     className="w-20 h-20 object-cover rounded"
                   />
                 )}
@@ -277,7 +421,7 @@ export default function CreateEvent() {
                 className="w-full"
               />
               <div className="grid grid-cols-3 gap-2 mt-2">
-                {formData.additionalImages.map((image, index) => (
+                {formData?.additionalImages?.map((image, index) => (
                   <div key={index} className="relative">
                     <img
                       src={URL.createObjectURL(image)}
@@ -289,7 +433,25 @@ export default function CreateEvent() {
                       variant="destructive"
                       size="icon"
                       className="absolute top-1 right-1"
-                      onClick={() => removeAdditionalImage(index)}
+                      onClick={() => removeAdditionalImage(index, "ad")}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                {formData?.existingImage?.map((image, index) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={api_base_url + "images/" + image?.image}
+                      alt={`Additional Image ${index + 1}`}
+                      className="w-full h-24 object-cover rounded"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-1 right-1"
+                      onClick={() => removeAdditionalImage(index, "ex")}
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -313,7 +475,7 @@ export default function CreateEvent() {
                 <Plus className="w-4 h-4 mr-2" /> Add Speaker
               </Button>
             </div>
-            {formData.speakers.map((speaker, index) => (
+            {formData?.speakers?.map((speaker, index) => (
               <Card key={index} className="p-4">
                 <div className="flex items-center justify-between mb-4">
                   <CardTitle className="text-lg">Speaker {index + 1}</CardTitle>
@@ -365,7 +527,9 @@ export default function CreateEvent() {
             ))}
           </div>
           <CardFooter>
-            <Button className="w-full">Create Event</Button>
+            <Button className="w-full">
+              {isEdit ? "Edit Event" : "Create Event"}
+            </Button>
           </CardFooter>
         </form>
       </CardContent>

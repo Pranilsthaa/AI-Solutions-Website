@@ -77,8 +77,7 @@ export default function PostArticle() {
   };
 
   return (
-    <div className={`min-h-screen p-8 transition-colors duration-200`}>
-      <Toaster />
+    <div className={`min-h-screen  transition-colors duration-200`}>
       <Card className="max-w-4xl mx-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold">

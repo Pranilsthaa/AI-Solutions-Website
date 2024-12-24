@@ -76,7 +76,6 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <Toaster />
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Provide Feedback</DialogTitle>
