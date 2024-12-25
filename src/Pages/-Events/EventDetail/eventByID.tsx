@@ -117,7 +117,11 @@ export default function EventsById({
         <meta property="og:description" content={event.description} />
         <meta
           property="og:image"
-          content={`${api_base_url}images/${event.banner_img}`}
+          content={
+            event.banner_img
+              ? `${api_base_url}images/${event.banner_img}`
+              : fallBackImg
+          }
         />
         <meta property="og:url" content={currentUrl} />
         <meta property="og:type" content="website" />
