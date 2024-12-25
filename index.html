@@ -2,6 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="description" content={event.description} />
+        <meta property="og:title" content={event.title} />
+        <meta property="og:description" content={event.description} />
+        <meta
+          property="og:image"
+          content='./public/image/fallback.jpg'
+        />
+        <meta property="og:url" content={currentUrl} />
+        <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
