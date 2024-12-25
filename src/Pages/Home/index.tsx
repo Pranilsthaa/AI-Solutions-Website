@@ -15,6 +15,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import getData from "@/api/getData";
+import { useEffect, useState } from "react";
 
 const data = [
   { to: 657, from: 400, duration: 2, label: "Number" },
@@ -188,7 +190,25 @@ const success = [
     className: "text-black",
   },
 ];
+
 function HomePage() {
+  const [customerFeedback, setCustomerFeedback] = useState([]);
+
+  const fetchCustomerFeedback = async () => {
+    try {
+      const response = await getData("getfeedbacks");
+      if (response.status === 200) {
+        setCustomerFeedback(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCustomerFeedback();
+  }, []);
+
   return (
     <div>
       <div

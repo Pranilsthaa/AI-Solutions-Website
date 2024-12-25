@@ -2,7 +2,6 @@ import getData from "@/api/getData";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 

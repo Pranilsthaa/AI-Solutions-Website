@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -22,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ImageGallery } from "./ImageGallery";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Helmet } from "react-helmet";
 
 interface Speaker {
   name: string;
@@ -44,6 +43,7 @@ interface EventDetailsProps {
     }
   ];
   speaker: Speaker[];
+  images: { image: string }[];
 }
 
 export const fallBackImg = "/image/fallback.jpg";
@@ -60,9 +60,40 @@ export default function EventsById({
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentUrl, setCurrentUrl] = useState("");
+
+  useEffect(() => {
+    setCurrentUrl(window.location.href);
+  }, []);
 
   const handleShare = (platform: string) => {
-    console.log(`Sharing to ${platform}`);
+    const shareUrl = encodeURIComponent(currentUrl);
+    const shareTitle = encodeURIComponent(
+      eventDetails?.eventById[0].title || "Event"
+    );
+
+    switch (platform) {
+      case "Facebook":
+        window.open(
+          `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
+          "_blank"
+        );
+        break;
+      case "Twitter":
+        window.open(
+          `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`,
+          "_blank"
+        );
+        break;
+      case "LinkedIn":
+        window.open(
+          `https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareTitle}`,
+          "_blank"
+        );
+        break;
+      default:
+        console.log(`Sharing to ${platform} is not implemented`);
+    }
   };
 
   if (!eventDetails) {
@@ -71,7 +102,7 @@ export default function EventsById({
 
   const { eventById, speaker, images } = eventDetails;
   const event = eventById[0];
-  let api_base_url = import.meta.env.VITE_API_KEY;
+  const api_base_url = import.meta.env.VITE_API_KEY;
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -79,6 +110,18 @@ export default function EventsById({
       exit={{ opacity: 0 }}
       className="min-h-screen flex justify-center items-center p-4 "
     >
+      <Helmet>
+        <title>{event.title}</title>
+        <meta name="description" content={event.description} />
+        <meta property="og:title" content={event.title} />
+        <meta property="og:description" content={event.description} />
+        <meta
+          property="og:image"
+          content={`${api_base_url}images/${event.banner_img}`}
+        />
+        <meta property="og:url" content={currentUrl} />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <Card className="w-full max-w-4xl bg-white shadow-xl rounded-2xl overflow-hidden">
         <div className="relative">
           {loading ? (
