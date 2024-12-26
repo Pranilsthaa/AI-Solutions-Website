@@ -1,3 +1,4 @@
+import postAuthData from "@/api/postAuthData";
 import {
   Dialog,
   DialogContent,
@@ -13,11 +14,17 @@ interface InquiryDetailsModalProps {
     id: string;
     name: string;
     email: string;
-    subject: string;
-    status: string;
-    message: string;
-    createdAt: string;
-  } | null;
+    phone: string;
+    company_name: string;
+    country: string;
+    job_title: string;
+    job_detail: string;
+    industry: string;
+    budget_range: string;
+    source_of_discovery: string;
+    status: "pending" | "responded";
+    created_at: string;
+  };
 }
 
 export function InquiryDetailsModal({
@@ -45,7 +52,7 @@ export function InquiryDetailsModal({
             </div>
             <div>
               <h3 className="font-semibold">Subject</h3>
-              <p>{inquiry.subject}</p>
+              <p>{inquiry.job_title}</p>
             </div>
             <div>
               <h3 className="font-semibold">Status</h3>
@@ -53,11 +60,11 @@ export function InquiryDetailsModal({
             </div>
             <div>
               <h3 className="font-semibold">Message</h3>
-              <p className="whitespace-pre-wrap">{inquiry.message}</p>
+              <p className="whitespace-pre-wrap">{inquiry.job_detail}</p>
             </div>
             <div>
               <h3 className="font-semibold">Created At</h3>
-              <p>{new Date(inquiry.createdAt).toLocaleString()}</p>
+              <p>{inquiry.created_at.split("T")[0] || "ND"}</p>
             </div>
           </div>
         </ScrollArea>

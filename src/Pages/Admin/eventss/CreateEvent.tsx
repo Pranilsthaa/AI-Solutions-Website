@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,10 +18,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import CustomButton from "@/components/CustomButton";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import postData from "@/api/postData";
 import { useLocation, useParams } from "react-router-dom";
 import getData from "@/api/getData";
+import { ScaleLoader } from "react-spinners";
 
 interface Speaker {
   name: string;
@@ -61,7 +62,7 @@ export default function CreateEvent() {
     speakers: [{ name: "", photo: "", designation: "" }],
   });
 
-  // console.log(formData);
+  const [loading, setloading] = useState(false);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -149,6 +150,7 @@ export default function CreateEvent() {
   };
 
   const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setloading(true);
     e.preventDefault();
     const data = new FormData();
     data.append("title", formData.title);
@@ -193,6 +195,8 @@ export default function CreateEvent() {
       } else {
         console.error("Unexpected error:", error);
       }
+    } finally {
+      setloading(false);
     }
   };
 
@@ -229,6 +233,8 @@ export default function CreateEvent() {
       }));
     }
   };
+
+  console.log(formData);
 
   const { id } = useParams();
   const { pathname } = useLocation();
@@ -278,8 +284,6 @@ export default function CreateEvent() {
     }
   }, [id]);
 
-  // console.log(formData);
-
   useEffect(() => {
     // Clean up the URL object
     return () => {
@@ -292,11 +296,13 @@ export default function CreateEvent() {
   }, [formData.banner]);
 
   const api_base_url = import.meta.env.VITE_API_KEY;
-
+  // console.log(formData.existingImage);
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl">Create New Event</CardTitle>
+        <CardTitle className="text-2xl">
+          {isEdit ? "Edit Event" : "Create New Event"}
+        </CardTitle>
         <CardDescription>
           Fill in the details to create a new event.
         </CardDescription>
@@ -528,7 +534,17 @@ export default function CreateEvent() {
           </div>
           <CardFooter>
             <Button className="w-full">
-              {isEdit ? "Edit Event" : "Create Event"}
+              {isEdit ? (
+                loading ? (
+                  <ScaleLoader color="#fff" height={10} />
+                ) : (
+                  "Edit Event"
+                )
+              ) : loading ? (
+                <ScaleLoader color="#fff" height={10} />
+              ) : (
+                "Create Event"
+              )}
             </Button>
           </CardFooter>
         </form>

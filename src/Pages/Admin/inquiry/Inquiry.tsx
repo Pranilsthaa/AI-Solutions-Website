@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -12,81 +12,79 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { RespondModal } from "./respond-modal";
 import { InquiryDetailsModal } from "./inquiry-details-modal";
+import getAuthData from "@/api/getAuthData";
+import postAuthData from "@/api/postAuthData";
+import { toast } from "sonner";
+import { set } from "date-fns";
 
-interface Inquiry {
+type Inquiry = {
   id: string;
   name: string;
   email: string;
-  subject: string;
-  status: "New" | "Responded";
-  message: string;
-  createdAt: string;
-}
-
-const inquiriesData = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    subject: "Product Inquiry",
-    status: "New",
-    message:
-      "Im interested in your latest product. Can you provide more details about its features and pricing?",
-    createdAt: "2023-06-01T10:00:00Z",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane@example.com",
-    subject: "Support Request",
-    status: "Responded",
-    message:
-      "Im having trouble accessing my account. Can you please help me reset my password?",
-    createdAt: "2023-06-02T14:30:00Z",
-  },
-  {
-    id: "3",
-    name: "Bob Johnson",
-    email: "bob@example.com",
-    subject: "Feedback",
-    status: "New",
-    message:
-      "Ive been using your service for a month now and I have some suggestions for improvement. Would you be interested in hearing them?",
-    createdAt: "2023-06-03T09:15:00Z",
-  },
-];
+  phone: string;
+  company_name: string;
+  country: string;
+  job_title: string;
+  job_detail: string;
+  industry: string;
+  budget_range: string;
+  source_of_discovery: string;
+  status: "pending" | "responded";
+}[];
 
 export default function ClientInquiries() {
-  const [inquiries, setInquiries] = useState(inquiriesData);
-  const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
+  const [inquiries, setInquiries] = useState<Inquiry>([]);
+  const [selectedInquiry, setSelectedInquiry] = useState<Inquiry[0] | null>(
+    null
+  );
   const [isRespondModalOpen, setIsRespondModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleRespond = (inquiry: Inquiry) => {
+  const fetchInquiryData = async () => {
+    try {
+      const response = await getAuthData("get_inquiry");
+      if (response.status == 200) {
+        setInquiries(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchInquiryData();
+  }, []);
+
+  const handleRespond = (inquiry: Inquiry[0]) => {
     setSelectedInquiry(inquiry);
     setIsRespondModalOpen(true);
   };
 
-  const handleViewDetails = (inquiry: Inquiry) => {
+  const handleViewDetails = (inquiry: Inquiry[0]) => {
     setSelectedInquiry(inquiry);
     setIsDetailsModalOpen(true);
   };
 
-  const handleSendResponse = (response: string) => {
-    // Here you would typically send the response to your backend
-    console.log(
-      `Sending response for inquiry ${selectedInquiry?.id}:`,
-      response
-    );
-
-    // Update the inquiry status locally
-    setInquiries((prevInquiries) =>
-      prevInquiries.map((inq) =>
-        inq.id === selectedInquiry?.id
-          ? { ...inq, status: "Responded" as const }
-          : inq
-      )
-    );
+  const handleSendResponse = async (response: string) => {
+    setLoading(true);
+    try {
+      const data = await postAuthData("inquiry_respond", {
+        id: selectedInquiry?.id,
+        subject: selectedInquiry?.job_title,
+        message: response,
+        email: selectedInquiry?.email,
+      });
+      if (data.status == 200) {
+        toast.success("Response sent successfully");
+        fetchInquiryData();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+      setIsRespondModalOpen(false);
+    }
   };
 
   return (
@@ -110,11 +108,11 @@ export default function ClientInquiries() {
               <TableRow key={inquiry.id}>
                 <TableCell>{inquiry.name}</TableCell>
                 <TableCell>{inquiry.email}</TableCell>
-                <TableCell>{inquiry.subject}</TableCell>
+                <TableCell>{inquiry.job_detail}</TableCell>
                 <TableCell>
                   <Badge
                     variant={
-                      inquiry.status === "Responded" ? "success" : "default"
+                      inquiry.status === "responded" ? "secondary" : "default"
                     }
                   >
                     {inquiry.status}
@@ -133,9 +131,9 @@ export default function ClientInquiries() {
                       onClick={() => handleRespond(inquiry)}
                       variant="outline"
                       size="sm"
-                      disabled={inquiry.status === "Responded"}
+                      disabled={inquiry.status === "responded"}
                     >
-                      {inquiry.status === "Responded" ? "Responded" : "Respond"}
+                      {inquiry.status === "responded" ? "Responded" : "Respond"}
                     </Button>
                   </div>
                 </TableCell>
@@ -148,7 +146,8 @@ export default function ClientInquiries() {
         isOpen={isRespondModalOpen}
         onClose={() => setIsRespondModalOpen(false)}
         onSend={handleSendResponse}
-        inquirySubject={selectedInquiry?.subject || ""}
+        inquirySubject={selectedInquiry?.job_detail || ""}
+        loading={loading}
       />
       <InquiryDetailsModal
         isOpen={isDetailsModalOpen}

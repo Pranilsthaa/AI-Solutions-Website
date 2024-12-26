@@ -23,6 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import countries from "world-countries";
 import { toast, Toaster } from "sonner";
 import getData from "@/api/getData";
+import postData from "@/api/postData";
 
 const formSchema = z.object({
   id: z.string().optional(),
@@ -85,9 +86,9 @@ export default function ClientInquiryForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const response = await getData("post_inquiry", values);
+      const response = await postData("post_inquiry", values);
       if (response) {
-        toast("Inquiry submitted successfully");
+        toast.success("Inquiry submitted successfully");
       }
     } catch (error) {
       console.error(error);

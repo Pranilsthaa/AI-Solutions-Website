@@ -8,12 +8,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { ScaleLoader } from "react-spinners";
 
 interface RespondModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSend: (response: string) => void;
   inquirySubject: string;
+  loading: boolean;
 }
 
 export function RespondModal({
@@ -21,6 +23,7 @@ export function RespondModal({
   onClose,
   onSend,
   inquirySubject,
+  loading,
 }: RespondModalProps) {
   const [response, setResponse] = useState("");
 
@@ -51,8 +54,12 @@ export function RespondModal({
           <Button type="button" variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="button" onClick={handleSend}>
-            Send Response
+          <Button disabled={loading} onClick={handleSend}>
+            {loading ? (
+              <ScaleLoader color="#fff" height={12} />
+            ) : (
+              "Send Reponse"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
