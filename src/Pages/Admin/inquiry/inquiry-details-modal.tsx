@@ -64,7 +64,10 @@ export function InquiryDetailsModal({
             </div>
             <div>
               <h3 className="font-semibold">Created At</h3>
-              <p>{inquiry.created_at.split("T")[0] || "ND"}</p>
+              <p>
+                {(inquiry.created_at && inquiry.created_at.split("T")[0]) ||
+                  "ND"}
+              </p>
             </div>
           </div>
         </ScrollArea>
