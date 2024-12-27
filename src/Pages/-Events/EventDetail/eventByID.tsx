@@ -126,8 +126,7 @@ export default function EventsById({
                     : fallBackImg
                 }
                 alt={event.title}
-                className="w-full h-64 sm:h-80 md:h-96 object-cover cursor-pointer"
-                onClick={() => setIsGalleryOpen(true)}
+                className="w-full h-64 sm:h-80 md:h-96 object-cover"
               />
             )}
 
