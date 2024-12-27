@@ -46,7 +46,7 @@ interface EventDetailsProps {
   images: { image: string }[];
 }
 
-export const fallBackImg = "/image/AI-solution-Logo.png";
+export const fallBackImg = "/image/fallback.jpg";
 
 export default function EventsById({
   themeColor = "purple",
