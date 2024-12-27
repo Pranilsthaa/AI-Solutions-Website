@@ -30,10 +30,30 @@ interface Event {
 }
 
 function EventCard({ event }: { event: Event }) {
-  const handleShare = (platform: string) => {
-    console.log(`Sharing to ${platform}`);
+  const handleShare = (platform: string, id: number) => {
+    switch (platform) {
+      case "Facebook":
+        window.open(
+          `https://www.facebook.com/sharer/sharer.php?u=https://ai-solutions-uk.vercel.app/events/${id}`,
+          "_blank"
+        );
+        break;
+      case "Twitter":
+        window.open(
+          `https://twitter.com/intent/tweet?url=https://ai-solutions-uk.vercel.app/events/${id}&text="Come join us at AI Solutions Event"`,
+          "_blank"
+        );
+        break;
+      case "LinkedIn":
+        window.open(
+          `https://www.linkedin.com/shareArticle?mini=true&url=https://ai-solutions-uk.vercel.app/events/${id}&title="Come join us at AI Solutions Event"`,
+          "_blank"
+        );
+        break;
+      default:
+        console.log(`Sharing to ${platform} is not implemented`);
+    }
   };
-
   const api_base_url = import.meta.env.VITE_API_KEY;
   return (
     <Card className="relative h-96 overflow-hidden">
@@ -73,13 +93,19 @@ function EventCard({ event }: { event: Event }) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => handleShare("Twitter")}>
+                <DropdownMenuItem
+                  onClick={() => handleShare("Twitter", event.id)}
+                >
                   Twitter
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleShare("Facebook")}>
+                <DropdownMenuItem
+                  onClick={() => handleShare("Facebook", event.id)}
+                >
                   Facebook
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleShare("LinkedIn")}>
+                <DropdownMenuItem
+                  onClick={() => handleShare("LinkedIn", event.id)}
+                >
                   LinkedIn
                 </DropdownMenuItem>
               </DropdownMenuContent>

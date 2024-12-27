@@ -46,7 +46,7 @@ interface EventDetailsProps {
   images: { image: string }[];
 }
 
-export const fallBackImg = "/image/fallback.jpg";
+export const fallBackImg = "/image/AI-solution-Logo.png";
 
 export default function EventsById({
   themeColor = "purple",
@@ -120,7 +120,11 @@ export default function EventsById({
                 initial={{ scale: 1.1 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5 }}
-                src={`${api_base_url}images/${event.banner_img}`}
+                src={
+                  event.banner_img
+                    ? `${api_base_url}images/${event.banner_img}`
+                    : fallBackImg
+                }
                 alt={event.title}
                 className="w-full h-64 sm:h-80 md:h-96 object-cover cursor-pointer"
                 onClick={() => setIsGalleryOpen(true)}

@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { fallBackImg } from "@/Pages/-Events/EventDetail/eventByID";
 
 interface Testimonial {
   id: number;
@@ -59,9 +60,8 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-const TestimonialSlider: React.FC = () => {
+const TestimonialSlider: React.FC = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-
   return (
     <div className="relative py-24 bg-gradient-to-b from-blue-50/80 to-white overflow-hidden">
       {/* Decorative elements */}
@@ -111,52 +111,59 @@ const TestimonialSlider: React.FC = () => {
           className="testimonial-swiper !pb-16"
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         >
-          {testimonials.map((testimonial, index) => (
-            <SwiperSlide key={testimonial.id}>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.5 }}
-                  className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-4xl mx-auto"
-                >
-                  <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                    <div className="flex-shrink-0">
-                      <img
-                        src={testimonial.avatar}
-                        alt={testimonial.name}
-                        className="w-20 h-20 rounded-full object-cover border-4 border-orange-100"
-                      />
-                    </div>
-                    <div className="flex-1 text-center md:text-left">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                        {testimonial.name}
-                      </h3>
-                      <p className="text-orange-500 font-medium mb-2">
-                        {testimonial.role} at {testimonial.company}
-                      </p>
-                      <Badge variant="secondary" className="mb-4">
-                        {testimonial.service}
-                      </Badge>
-                      <p className="text-blue-600/80 text-lg mb-6">
-                        "{testimonial.content}"
-                      </p>
-                      <div className="flex justify-center md:justify-start gap-1">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className="w-6 h-6 text-orange-500 fill-current"
-                          />
-                        ))}
+          {data &&
+            data.length > 0 &&
+            data.map((testimonial, index) => (
+              <SwiperSlide key={testimonial.id}>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-4xl mx-auto"
+                  >
+                    <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+                      <div className="flex-shrink-0">
+                        <img
+                          src={
+                            testimonial.image
+                              ? testimonial.image
+                              : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsBGOs2225fFqTfnl5EKlrEUBn5-drby1x3Q&s"
+                          }
+                          alt={testimonial.name}
+                          className="w-20 h-20 rounded-full object-cover border-4 border-orange-100"
+                        />
+                      </div>
+                      <div className="flex-1 text-center md:text-left">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                          {testimonial.name}
+                        </h3>
+                        <Badge variant="secondary" className="mb-4">
+                          {testimonial.service}
+                        </Badge>
+                        <p className="text-blue-600/80 text-lg mb-6">
+                          "{testimonial.message}"
+                        </p>
+                        <div className="flex justify-center md:justify-start gap-1">
+                          {[
+                            ...Array(
+                              testimonial.rating && parseInt(testimonial.rating)
+                            ),
+                          ].map((_, i) => (
+                            <Star
+                              key={i}
+                              className="w-6 h-6 text-orange-500 fill-current"
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </SwiperSlide>
-          ))}
+                  </motion.div>
+                </AnimatePresence>
+              </SwiperSlide>
+            ))}
           <div className="swiper-button-prev !text-orange-500 !w-12 !h-12 !bg-white !rounded-full !shadow-md after:!text-2xl"></div>
           <div className="swiper-button-next !text-orange-500 !w-12 !h-12 !bg-white !rounded-full !shadow-md after:!text-2xl"></div>
         </Swiper>
