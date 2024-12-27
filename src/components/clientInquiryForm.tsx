@@ -21,8 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import countries from "world-countries";
-import { toast, Toaster } from "sonner";
-import getData from "@/api/getData";
+import { toast } from "sonner";
 import postData from "@/api/postData";
 
 const formSchema = z.object({
@@ -87,8 +86,9 @@ export default function ClientInquiryForm() {
     setIsSubmitting(true);
     try {
       const response = await postData("post_inquiry", values);
-      if (response) {
+      if (response.status == 200) {
         toast.success("Inquiry submitted successfully");
+        form.reset();
       }
     } catch (error) {
       console.error(error);
