@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import StarRating from "../StarRating";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { ScaleLoader } from "react-spinners";
 import postData from "@/api/postData";
 
@@ -57,7 +57,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
       });
       if (response.status === 200) {
         toast.success("Feedback submitted successfully");
-        setIsOpen(false);
+        // setIsOpen(false);
       } else {
         toast.error("Failed to submit feedback");
       }

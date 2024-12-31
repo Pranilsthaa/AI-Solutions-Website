@@ -26,7 +26,7 @@ export function HeroSection() {
           innovation and efficiency.
         </p>
         <Link
-          to="/contact"
+          to="/contactus"
           className="bg-blue-500 text-white px-8 py-3 font-poppins rounded-3xl hover:bg-blue-600 transition-colors"
         >
           Get Started

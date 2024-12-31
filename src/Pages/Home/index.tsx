@@ -25,7 +25,7 @@ export default function HomePage() {
   useEffect(() => {
     fetchCustomerFeedback();
   }, []);
-
+  console.log(customerFeedback);
   return (
     <div>
       <HeroSection />

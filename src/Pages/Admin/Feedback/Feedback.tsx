@@ -1,3 +1,4 @@
+import getAuthData from "@/api/getAuthData";
 import getData from "@/api/getData";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +50,7 @@ export default function ClientFeedbacks() {
 
   const getFeedbacks = async () => {
     try {
-      const response = await getData("getfeedbacks");
+      const response = await getAuthData("getfeedbacks");
       if (response.status == 200) {
         setFeedbacks(response.data);
       }

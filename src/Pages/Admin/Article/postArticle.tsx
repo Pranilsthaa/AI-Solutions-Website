@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Upload } from "lucide-react";
 import { toast, Toaster } from "sonner";
 import postData from "@/api/postData";
+import postAuthData from "@/api/postAuthData";
 
 export default function PostArticle() {
   const [article, setArticle] = useState({
@@ -67,9 +68,16 @@ export default function PostArticle() {
     formData.append("description", article.description);
     formData.append("slug", article.title.split(" ").join("-").toLowerCase());
     try {
-      const response = await postData("post_article", formData);
+      const response = await postAuthData("post_article", formData);
       if (response.status === 200) {
         toast(response.data);
+        setArticle({
+          photo: "",
+          author: "",
+          title: "",
+          description: "",
+        });
+        setPreviewPhoto(null);
       }
     } catch (error) {
       console.log(error);

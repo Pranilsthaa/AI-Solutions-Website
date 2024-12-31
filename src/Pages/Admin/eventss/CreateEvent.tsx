@@ -20,9 +20,10 @@ import axios from "axios";
 import CustomButton from "@/components/CustomButton";
 import { toast } from "sonner";
 import postData from "@/api/postData";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import getData from "@/api/getData";
 import { ScaleLoader } from "react-spinners";
+import postAuthData from "@/api/postAuthData";
 
 interface Speaker {
   name: string;
@@ -64,6 +65,8 @@ export default function CreateEvent() {
 
   const [loading, setloading] = useState(false);
 
+  const navigation = useNavigate();
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index?: number
@@ -91,8 +94,8 @@ export default function CreateEvent() {
         setFormData((prevData) => ({
           ...prevData,
           banner: e.target.files![0],
+          existingBanner: undefined,
         }));
-        setFormData((prevData) => ({ ...prevData, existingBanner: undefined }));
       } else if (e.target.name === "additionalImages") {
         setFormData((prevData) => ({
           ...prevData,
@@ -121,10 +124,12 @@ export default function CreateEvent() {
     formData.additionalImages.forEach((image) => {
       data.append(`additionalImages`, image);
     });
+    setloading(true);
     try {
-      const response = await postData("postevents", data);
+      const response = await postAuthData("postevents", data);
       if (response.status === 200) {
         toast.success("Event created successfully");
+        navigation("/admin/events");
       } else {
         console.log(`Failed to create event: ${response.statusText}`);
       }
@@ -146,6 +151,8 @@ export default function CreateEvent() {
       } else {
         console.error("Unexpected error:", error);
       }
+    } finally {
+      setloading(false);
     }
   };
 
@@ -173,9 +180,10 @@ export default function CreateEvent() {
       data.append(`existingImages`, JSON.stringify(image));
     });
     try {
-      const response = await postData(`edit-event/${id}`, data);
+      const response = await postAuthData(`edit-event/${id}`, data);
       if (response.status === 200) {
         toast.success("Event Edited successfully");
+        navigation("/admin/events");
       } else {
         console.log(`Failed to create event: ${response.statusText}`);
       }
@@ -233,8 +241,6 @@ export default function CreateEvent() {
       }));
     }
   };
-
-  console.log(formData);
 
   const { id } = useParams();
   const { pathname } = useLocation();
@@ -296,7 +302,7 @@ export default function CreateEvent() {
   }, [formData.banner]);
 
   const api_base_url = import.meta.env.VITE_API_KEY;
-  // console.log(formData.existingImage);
+  console.log(formData);
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
