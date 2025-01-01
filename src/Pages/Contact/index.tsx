@@ -33,10 +33,10 @@ export default function ClientInquiryPage() {
       </div>
       <main className="container relative z-50 -mt-72 mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             DROP US A MESSAGE FOR ANY QUERY
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-gray-400">
             We're here to help. Fill out the form below, and we'll get back to
             you as soon as possible.
           </p>

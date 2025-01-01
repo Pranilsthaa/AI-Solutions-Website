@@ -135,6 +135,7 @@ export default function AdminAccountList() {
           <Plus className="mr-2 h-4 w-4" /> Create Admin
         </Button>
       </CardHeader>
+
       <CardContent>
         <Table>
           <TableHeader>
@@ -145,8 +146,7 @@ export default function AdminAccountList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {accounts &&
-              accounts.length > 0 &&
+            {accounts && accounts.length > 0 ? (
               accounts?.map((account: AdminAccount) => (
                 <TableRow key={account.id}>
                   <TableCell>{account.username}</TableCell>
@@ -177,7 +177,10 @@ export default function AdminAccountList() {
                     )}
                   </TableCell>
                 </TableRow>
-              ))}
+              ))
+            ) : (
+              <h1>No Admin Accounts</h1>
+            )}
           </TableBody>
         </Table>
       </CardContent>
