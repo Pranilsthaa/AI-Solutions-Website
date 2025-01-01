@@ -1,10 +1,10 @@
 import CountEffect from "@/components/countEffect";
 
 const data = [
-  { to: 657, from: 400, duration: 2, label: "Number" },
-  { to: 1223, from: 1000, duration: 2, label: "Example" },
-  { to: 8772, from: 8300, duration: 2, label: "Testing" },
-  { to: 892, from: 850, duration: 5, label: "Coffee" },
+  { to: 657, from: 500, duration: 2, label: "Clients" },
+  { to: 98, from: 90, duration: 3, label: "Accuracy" },
+  { to: 600, from: 550, duration: 2, label: "Project Delivered" },
+  { to: 10, from: 5, duration: 5, label: "Patent" },
 ];
 
 export function StatisticsSection() {

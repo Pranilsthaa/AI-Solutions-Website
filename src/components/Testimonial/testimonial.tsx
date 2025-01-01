@@ -6,6 +6,7 @@ import { Pagination, Autoplay, Navigation } from "swiper/modules";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 // Import Swiper styles
 import "swiper/css";
@@ -24,44 +25,18 @@ interface Testimonial {
   service: string;
 }
 
-const testimonials: Testimonial[] = [
-  {
-    id: 1,
-    name: "James Eva",
-    role: "CEO",
-    company: "Envato",
-    avatar: "/placeholder.svg?height=80&width=80",
-    content:
-      "Accusantium veritatis dolore ducimus illum, cumque excepturi, autem rerum illo amet placeat odit corporis! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid ullam harum sit.",
-    rating: 5,
-    service: "Web Development",
-  },
-  {
-    id: 2,
-    name: "Sarah Chen",
-    role: "CTO",
-    company: "TechFlow",
-    avatar: "/placeholder.svg?height=80&width=80",
-    content:
-      "Excepturi autem rerum illo amet placeat odit corporis! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusantium veritatis dolore ducimus illum, cumque.",
-    rating: 5,
-    service: "Mobile App Development",
-  },
-  {
-    id: 3,
-    name: "Michael Ross",
-    role: "Director",
-    company: "InnovateLab",
-    avatar: "/placeholder.svg?height=80&width=80",
-    content:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusantium veritatis dolore ducimus illum, cumque excepturi, autem rerum illo amet placeat odit corporis!",
-    rating: 5,
-    service: "UI/UX Design",
-  },
-];
+const getInitials = (name: string) => {
+  return name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+};
 
 const TestimonialSlider: React.FC = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <div className="relative py-24 bg-gradient-to-b from-blue-50/80 to-white overflow-hidden">
       {/* Decorative elements */}
@@ -126,15 +101,15 @@ const TestimonialSlider: React.FC = ({ data }) => {
                   >
                     <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
                       <div className="flex-shrink-0">
-                        <img
-                          src={
-                            testimonial.image
-                              ? testimonial.image
-                              : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsBGOs2225fFqTfnl5EKlrEUBn5-drby1x3Q&s"
-                          }
-                          alt={testimonial.name}
-                          className="w-20 h-20 rounded-full object-cover border-4 border-orange-100"
-                        />
+                        <Avatar className="w-20 h-20 border-4 border-orange-100">
+                          <AvatarImage
+                            src={testimonial.image}
+                            alt={testimonial.name}
+                          />
+                          <AvatarFallback>
+                            {getInitials(testimonial.name)}
+                          </AvatarFallback>
+                        </Avatar>
                       </div>
                       <div className="flex-1 text-center md:text-left">
                         <h3 className="text-xl font-semibold text-gray-900 mb-1">
@@ -147,16 +122,14 @@ const TestimonialSlider: React.FC = ({ data }) => {
                           "{testimonial.message}"
                         </p>
                         <div className="flex justify-center md:justify-start gap-1">
-                          {[
-                            ...Array(
-                              testimonial.rating && parseInt(testimonial.rating)
-                            ),
-                          ].map((_, i) => (
-                            <Star
-                              key={i}
-                              className="w-6 h-6 text-orange-500 fill-current"
-                            />
-                          ))}
+                          {[...Array(parseInt(testimonial.rating))].map(
+                            (_, i) => (
+                              <Star
+                                key={i}
+                                className="w-6 h-6 text-orange-500 fill-current"
+                              />
+                            )
+                          )}
                         </div>
                       </div>
                     </div>

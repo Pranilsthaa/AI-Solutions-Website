@@ -3,74 +3,78 @@ import { motion } from "framer-motion";
 
 const successStory = [
   {
-    name: "Retail",
+    name: "Healthcare",
     challenge:
-      "A UK-based online fashion retailer faced challenges with personalized product recommendations, leading to low conversion rates and customer churn.",
+      "A private hospital in Manchester faced difficulties in accurately identifying anomalies in X-ray and MRI scans, leading to missed diagnoses and treatment delays.",
     solution:
-      "AI Solutions implemented an AI-powered recommendation engine that analyzes customer browsing history, purchase patterns, and real-time interactions to provide highly personalized product suggestions.",
+      "AI Solutions deployed their 'Computer Vision Solutions' to automatically detect abnormalities in medical imaging. The system leveraged advanced object detection and image classification algorithms to assist doctors in making more accurate diagnoses.",
     results: [
-      "20% increase in click-through rates on product recommendations",
-      "15% uplift in average order value",
-      "10% reduction in customer churn",
-      "Improved customer satisfaction scores due to more relevant product offerings",
+      "30% reduction in missed diagnoses",
+      "20% decrease in time to diagnose critical conditions",
+      "Improved treatment outcomes through earlier intervention",
+      "Enhanced patient trust and confidence in hospital services",
     ],
-    image: "/placeholder.svg?height=200&width=200",
+    image:
+      "https://cdn.prod.website-files.com/650c1bee516c4e723b11b29a/65206264927e177f8bd65950_651f6a5b0bcc2eb5956182ea_Top%252050%2520Healthcare%2520Companies%2520and%2520Their%2520Impact%2520on%2520the%2520Industry.webp",
   },
   {
     name: "Finance",
     challenge:
-      "A fintech startup in London struggled with fraud detection, experiencing significant financial losses due to sophisticated fraudulent transactions.",
+      "A leading UK insurance provider struggled with manually processing large volumes of documents, causing lengthy turnaround times and high error rates.",
     solution:
-      "AI Solutions developed an AI-driven fraud detection system that utilizes machine learning to identify suspicious patterns and anomalies in real-time transactions.",
+      "AI Solutions implemented their 'Intelligent Document Processing' service. Using optical character recognition (OCR) and machine learning, the system automated document classification and data extraction, drastically reducing manual input.",
     results: [
-      "90% accuracy in detecting fraudulent transactions",
-      "80% reduction in financial losses due to fraud",
-      "Improved operational efficiency in fraud investigation",
-      "Enhanced security and trust among customers",
+      "40% reduction in document processing time",
+      "35% decrease in manual data entry errors",
+      "Improved compliance through better data accuracy",
+      "Faster turnaround for claim approvals and customer service",
     ],
-    image: "/placeholder.svg?height=200&width=200",
+    image:
+      "https://cdn.corporatefinanceinstitute.com/assets/finance-definition.jpg",
   },
   {
-    name: "Manufacturing",
+    name: "E-commerce",
     challenge:
-      "A manufacturing company in the Midlands faced production inefficiencies due to unplanned downtime and equipment failures.",
+      "A rapidly growing online marketplace struggled to personalize product recommendations, resulting in lower average order value and customer engagement.",
     solution:
-      "AI Solutions implemented a predictive maintenance solution that uses sensor data and machine learning algorithms to predict potential equipment failures and optimize maintenance schedules.",
+      "AI Solutions deployed 'Recommender Systems' to analyze user behavior, purchase history, and browsing patterns, generating tailored product suggestions and improving user experience.",
     results: [
-      "30% reduction in unplanned downtime",
-      "20% decrease in maintenance costs",
-      "15% increase in production output",
-      "Improved equipment lifespan and overall factory efficiency",
+      "25% increase in customer engagement with recommended products",
+      "15% uplift in average order value",
+      "Enhanced site navigation with dynamic product displays",
+      "Stronger customer loyalty due to better personalization",
     ],
-    image: "/placeholder.svg?height=200&width=200",
+    image: "https://avantify.io/wp-content/uploads/2023/12/ecommerce.jpeg",
   },
   {
-    name: "Logistics",
+    name: "Telecom",
     challenge:
-      "A logistics company in the UK was struggling with optimizing delivery routes, resulting in increased fuel costs and delivery delays.",
+      "A large UK telecommunications company faced high call volumes, leading to long wait times and reduced customer satisfaction.",
     solution:
-      "AI Solutions developed an AI-powered route optimization system that considers real-time traffic conditions, delivery schedules, and other factors to generate the most efficient delivery routes.",
+      "AI Solutions integrated their 'Voice & Speech Recognition' service into the company's customer support system. This enabled automated call routing, speech-to-text transcription, and intelligent IVR (Interactive Voice Response) to quickly direct callers to the right agent or self-service option.",
     results: [
-      "15% reduction in fuel costs",
-      "10% improvement in on-time delivery rates",
-      "5% decrease in delivery mileage",
-      "Improved driver efficiency and customer satisfaction",
+      "20% decrease in average call handling time",
+      "Improved customer satisfaction due to faster resolution",
+      "Reduced strain on human support agents",
+      "Optimized call flow using real-time speech analytics",
     ],
-    image: "/placeholder.svg?height=200&width=200",
+    image:
+      "https://telecomreviewasia.com/images/stories/2023/06/Strategies_for_Telecom_Companies_to_Thrive_in_Dynamic_Asia-Pacific_Market.jpg",
   },
   {
-    name: "Customer Service",
+    name: "Retail Operations",
     challenge:
-      "A UK-based telecommunications company was overwhelmed with customer support requests, leading to long wait times and frustrated customers.",
+      "A nationwide grocery chain struggled with labor-intensive back-office tasks, from inventory checks to invoice reconciliation, causing bottlenecks and delays.",
     solution:
-      "AI Solutions implemented an AI-powered chatbot that handles common customer inquiries, providing instant support and freeing up human agents to focus on more complex issues.",
+      "AI Solutions provided a combined 'AI Consultancy & Strategy' alongside 'Robotic Process Automation (RPA)'. They mapped out core processes and deployed RPA bots to handle repetitive tasks, allowing employees to focus on higher-value activities.",
     results: [
-      "40% reduction in customer support ticket volume",
-      "25% improvement in customer satisfaction scores",
-      "20% decrease in average handling time for customer inquiries",
-      "24/7 availability of customer support",
+      "30% reduction in manual errors across invoicing and data entry",
+      "15% faster inventory audits",
+      "Significant cost savings by reallocating staff resources",
+      "Scalable automation framework for future expansion",
     ],
-    image: "/placeholder.svg?height=200&width=200",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDe2_ubrr6BZ4B-EN1bt6OBuBwKh0eODiphw&s",
   },
 ];
 
@@ -105,7 +109,13 @@ export function SuccessStorySection() {
             }`}
             key={index}
           >
-            <div className="flex-1 border-2 border-orange-200"></div>
+            <div className="flex-1 border-2 border-orange-200 p-2">
+              <img
+                src={item.image}
+                alt={item.name}
+                className="object-contain h-full w-full"
+              />
+            </div>
             <div className="flex-[3] bg-gray-500 px-6 py-4">
               <figure>
                 <h1 className="text-2xl text-white font-poppins font-bold">

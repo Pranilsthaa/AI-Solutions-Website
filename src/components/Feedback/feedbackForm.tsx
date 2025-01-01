@@ -110,13 +110,27 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
                 <SelectValue placeholder="Select a service" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="web-development">Web Development</SelectItem>
-                <SelectItem value="mobile-app">
-                  Mobile App Development
+                <SelectItem value="Robotic Process Automation (RPA)">
+                  Robotic Process Automation (RPA)
                 </SelectItem>
-                <SelectItem value="ui-ux">UI/UX Design</SelectItem>
-                <SelectItem value="cloud-services">Cloud Services</SelectItem>
-                <SelectItem value="consulting">IT Consulting</SelectItem>
+                <SelectItem value="AI Consultancy & Strategy">
+                  AI Consultancy & Strategy
+                </SelectItem>
+                <SelectItem value="Voice & Speech Recognition">
+                  Voice & Speech Recognition
+                </SelectItem>
+                <SelectItem value="Recommender Systems">
+                  Recommender Systems
+                </SelectItem>
+                <SelectItem value="Intelligent Document Processing">
+                  Intelligent Document Processing
+                </SelectItem>
+                <SelectItem value="Facial Recognition">
+                  Facial Recognition
+                </SelectItem>
+                <SelectItem value="Workflow Automation">
+                  Workflow Automation
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
