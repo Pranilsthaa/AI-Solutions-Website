@@ -30,9 +30,13 @@ export function Sidebar() {
     window.location.href = "/login";
   };
   const tokenData = localStorage.getItem("token");
-  const parsedToken = tokenData && JSON.parse(tokenData);
-  if (!parsedToken) return null;
-  const isSuperAdmin = parsedToken && parsedToken.role === "superadmin";
+
+  let isSuperAdmin: boolean;
+  if (tokenData) {
+    const parsedToken = tokenData && JSON.parse(tokenData);
+    if (!parsedToken) return null;
+    isSuperAdmin = parsedToken && parsedToken.role === "superadmin";
+  }
   return (
     <div className="flex h-screen">
       <div className="w-64 border-r bg-gray-100/40 dark:bg-gray-800/40">
